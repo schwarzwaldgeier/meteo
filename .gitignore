@@ -18,3 +18,8 @@ nytprof.out
 *.o
 *.bs
 /_eumm/
+
+# Excluding logs
+/LOGS/
+*.log
+
