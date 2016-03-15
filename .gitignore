@@ -23,3 +23,4 @@ nytprof.out
 *.o
 *.bs
 /_eumm/
+/WEBROOT/credentials.php
