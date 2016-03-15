@@ -2,7 +2,6 @@
 **/logs/*
 **/log/*
 **/logs.txt
->>>>>>> 98189e58e440c401892b3086ed87b8f250bda319
 /blib/
 /.build/
 _build/
