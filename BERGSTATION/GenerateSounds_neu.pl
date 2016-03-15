@@ -1,7 +1,6 @@
 #!/usr/bin/perl
 
 use LWP::Simple;
-use Switch;
 
 ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime(time); $mon++;
 $year += 1900;
@@ -216,7 +215,7 @@ if ((time - $a3) > 2300) {
 } else {
     AddToSoundfile($soundfile_pause3, "both", 0);
     
-    AddToSoundfile($soundfile_currentWindspeed;, "both", 2);    # Aktuelle Windstärke:
+    AddToSoundfile($soundfile_currentWindspeed, "both", 2);    # Aktuelle Windstärke:
     AddToSoundfile(&wdirection($a2), "both", 2);                # (Windrichtung)
     
   
@@ -260,7 +259,7 @@ if ((time - $a3) > 2300) {
     #print "xxx" . $a2 . "xxx\n";
     $dummywd = &wdirection($a2);
     
-    AddToSoundfile($soundfile_gust($dummywd, "both", 2);        # (Windrichtung)
+    AddToSoundfile($dummywd, "both", 2);                        # (Windrichtung)
     if (length($a1) == 3) {
             AddToSoundfile($soundfile_onehundred, "both", 0);   # einhundert ...
             AddToSoundfile($ws[substr($a1,1,2)], "both", 0);    # (Windgeschwindigkeit)
@@ -274,7 +273,7 @@ if ((time - $a3) > 2300) {
     AddToSoundfile($soundfile_windspeedOneHourAgo, "both", 2);  # Wind genau vor einer Stunde:
 		    ($a1,$a2) = split(",",$hourly);
     #print "$a2 lllllll\n";
-    AddToSoundfile(&wdirection($a2), "both", 2)                 # (Windrichtung)
+    AddToSoundfile(&wdirection($a2), "both", 2);                # (Windrichtung)
 		
 
     if (length($a1) == 3) {
@@ -378,18 +377,17 @@ sub AddToSoundfile
     my $pause = shift;
     my $pauseFile = $soundfile_pause0;
     
-    switch ($pause)
-    {
-        case 0 {$pauseFile = $soundfile_pause0;}
-        case 2 {$pauseFile = $soundfile_pause2;}
-        case 3 {$pauseFile = $soundfile_pause3;}
-        case 5 {$pauseFile = $soundfile_pause5;}
-        case 7 {$pauseFile = $soundfile_pause7;}
-        else {$pauseFile =   $soundfile_pause2;}
-    }
+    
+        if ($pause==0)   {$pauseFile == $soundfile_pause0;}
+        if ($pause==2)   {$pauseFile == $soundfile_pause2;}
+        if ($pause==3)   {$pauseFile == $soundfile_pause3;}
+        if ($pause==5)   {$pauseFile == $soundfile_pause5;}
+        if ($pause==7)   {$pauseFile == $soundfile_pause7;}
+        else {$pauseFile ==   $soundfile_pause2;}
     
     
-    if ($file = "phone" || $file = "both" )
+    
+    if ($file == "phone" || $file == "both" )
     {
         push $args_phone,$soundfile_phone.$sound;
         if ($pause > 0)
@@ -398,7 +396,7 @@ sub AddToSoundfile
         
 
     }
-    if ($file = "radio" || $file="both" )
+    if ($file == "radio" || $file == "both" )
     {
         push $args_radio,$soundfile_radio.$sound;
         if ($pause > 0){
