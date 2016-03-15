@@ -36,8 +36,8 @@ $soundfile_gust	= "/boe1.mus.wav";
 $soundfile_outOfOrder = "/out-of-order.mus.wav";
 #$soundfile_jhv = "/jhv-7200.wav";
 
-$soundfile_timePrefix		= "/es-ist.mus.wav";
-$soundfile_timeInfix 		= "/uhr.mus.wav";
+#$soundfile_timePrefix		= "/es-ist.mus.wav";
+#$soundfile_timeInfix 		= "/uhr.mus.wav";
 
 $stager		= "/stager.mus.wav";
 $soundfile_hello	= "/indi.mus.wav";
@@ -45,9 +45,6 @@ $soundfile_bye		= "/bye.mus.wav";
 
 $soundfile_workToDo		= "/we-ae.mus.wav";
 $soundfile_website	= "/www.mus.wav";
-
-$stem_mi       = "/mi-sta.mus.wav";
-$stem_today    = "/he-sta.mus.wav";
 
 $soundfile_kmh		= "/kmh.mus.wav";
 
