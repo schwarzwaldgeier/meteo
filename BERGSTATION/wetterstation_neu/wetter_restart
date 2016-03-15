@@ -1,0 +1,10 @@
+#!/bin/sh
+### BEGIN INIT INFO
+# Provides:          wetterstation
+
+# Stoppen der Daten
+/etc/init.d/./wetterstation_neu stop
+sleep 4
+/etc/init.d/./wetterstation_neu start
+
+

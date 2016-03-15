@@ -1,0 +1,9 @@
+#!/usr/bin/perl
+$i = 0;
+while ($i != -1) {
+    system("/var/www/BERGSTATION/wetterstation_neu/WETTER_SOCKET");
+    wait;
+    if ($? != (-1)) {
+	system("kill int($?)");
+    }
+}
