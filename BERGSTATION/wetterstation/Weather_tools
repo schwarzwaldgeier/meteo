@@ -1,0 +1,125 @@
+<h2>Weather Tools</h2>
+<p>
+This set of tools has evolved, rather than been designed, and it probably
+shows. It is a fairly complex system, but seems to work and be fairly
+robust.
+<p>
+Input :
+<p>
+Input (for me) comes from a WMR918 weather station. I run "weather_clean -p" in
+a window, and it traps all the output and logs it into archive files. I
+generally have to restart it only when power goes away, and when the clocks get
+reset for daylight savings.
+<p>
+weather_clean uses Weather::Archive to manage the archival files,
+Weather::Conversions to do units conversions to my chosen units (imperial), and
+weather_wmr918.pl to do the raw data conversion off the serial port. The
+structure is peculiar to try to maintain compatibility with MisterHouse. You
+could, in principle, plug weather_wmr918.pl into MisterHouse and use it to
+watch over your weather data. Someday I'll set things up so that both the
+archiving and MisterHouse get the data at the same time.
+<p>
+<pre>
+
+serial port ---&gt; weather_clean <--> weather_wmr918.pl
+                               <--> Weather::Conversions
+                               ---&gt; Weather::Archive ---&gt; archxxxxxxxxxxx
+
+
+</pre>
+<p>
+The next step is to do some processing of the raw data, and create a daily
+summary and cleaned up file.
+<p>
+I look for spikes and remove them, interpolate/average all the measurements to
+10 minute intervals, and fix problems like the rain total being reset to zero. 
+<p>
+<pre>
+archive file (archxxxxxxxxx) ---&gt; Pack_weather.pl <--> Weather::ReadArch;
+                                                  <--> Weather::Math
+                                                  ---&gt; pack_4-16-2001
+</pre>
+<p>
+ReadArch just reads the archive file (of course). Most of the real work is in
+Weather::Math. That is where I do spike detection, interpolation, and the
+vector functions required for dealing with the wind vectors. Output is a nice
+daily summary like this :
+<p>
+<pre>
+## date 4/16/2001
+## input file arch987483621
+## rainfall
+14:35  0.040
+15:05  0.040
+15:15  0.080
+15:25  0.110
+17:05  0.040
+17:15  0.040
+17:25  0.400
+17:35  0.070
+17:45  0.120
+18:05  0.040
+23:25  0.100
+## extrema data
+TO =  83.8 at 12:35 and  67.5 at 22:18
+TI =  72.9 at 19:11 and  70.3 at 14:03
+HO =  95.0 at 23:51 and  59.0 at 12:41
+HI =  78.0 at 13:12 and  65.0 at 21:23
+DO =  73.4 at 14:42 and  59.0 at 15:10
+DI =  64.4 at 12:34 and  59.0 at 20:59
+BR =  30.0 at 22:22 and  29.9 at 23:59
+Heat =  87.2 at 12:10 and  80.3 at 10:00
+WC =  84.2 at 12:07 and  64.4 at 15:21
+## other data
+## begin time 00:05
+## Time TO  TI  HO  HI  DO  DI  WC Heat BR gust_dir gust_speed avg_dir avg_speed
+00:05  76.43 -999.00 -999.00 -999.00 -999.00 -999.00 76.43 -999.00 -999.00   78.0    0.0   78.0    0
+.0
+00:15  76.11 70.73 76.53 70.00 69.51 60.80 76.11 76.11 29.90   78.0    0.0   78.0    0.0
+00:25  75.74 70.79 77.24 70.00 69.80 60.80 75.74 75.74 29.91   78.0    0.0   78.0    0.0
+00:35  75.70 70.70 78.00 70.00 68.00 60.80 75.70 75.70 29.91   78.0    0.0   78.0    0.0
+00:45  75.70 70.89 78.00 70.19 68.00 60.80 75.70 75.70 29.89   78.0    0.0   78.0    0.0
+00:55  75.65 70.74 78.65 70.00 68.00 60.80 75.65 75.65 29.89   78.0    0.0   78.0    0.0
+
+</pre>
+<p>
+After all that, I'd like to look at the data and see what it looks like. I have
+several scripts that collect the data from pack files, and using GD::Graph,
+create plots.  These scripts are all similar :
+<p>
+<pre>
+
+input pack_xx_xx_xxx ---&gt; Temp_plots.pl <--> Weather::ReadPack;
+                                        <--> Weather::Climate
+                                        <--> GD::Graph::mixed
+                                        ---&gt; Temperature.png
+                                        ---&gt; tmaxmin (text file of extrema)
+
+</pre>
+<p>
+Weather::Climate contains the local climatological norms and supplies them
+to the plotting program. The numbers all pertain to Houston, Texas.
+<p>
+The main plotting programs are :
+<ul>
+<li>Rain_plots.pl - create plots of rainfall
+<li>Wind_plots.pl - create plots of wind gusts
+<li>Temp_plots.pl - create plots of temperature, pressure, &amp; humidity
+<li>Temp_hilo_plots.pl - create hi/lo plots of temperature, pressure &amp; humidity
+</ul>
+<p>
+All of them have some hardcoded paths that would need to be altered.
+<p>
+
+To drive all of these from a cron, I have some scripts that run these, gather
+the outputs, and build web pages.
+<p>
+Make_weather_page - yesterday's weather
+<br>
+Make_weather_past - several days of past weather
+<p>
+Finally, to mirror the web pages out onto my website, I run weex on a cron.
+<p>
+There is also a utility Edit_packfiles.pl that can be used to set chunks
+of measurements in the pack files to undefined. This is good when your 
+batteries die and you record garbage for a few days. 8-)

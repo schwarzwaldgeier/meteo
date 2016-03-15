@@ -1,0 +1,207 @@
+#!/usr/bin/perl -w
+
+#	Build a weather page based on historical data
+
+#	usage : Make_weather_past --fromdate mm/dd/yyyy --todate mm/dd/yyyy
+#			or
+#			Make_weather_past --last <# days>
+#			both modes also use
+#			--prefix <filename prefix>
+
+use strict;
+use Date::Calc qw(
+             Date_to_Days
+             Delta_Days
+             Add_Delta_Days
+			 Add_Delta_DHMS
+			 Today
+         );
+
+my @dow = qw/Sunday Monday Tuesday Wednesday Thursday Friday Saturday/;
+my @mon = qw/January February March April May June July August September October November December/;
+
+#my $wdir = "/home2/archive/weatherdata/"; # where are files kept
+#my $web = "/home/ajackson/mirrors/icct/weather/"; # where do we put output?
+my $wdir = "/archive/stuff/weatherdata/"; # where are files kept
+my $web = "/archive/stuff/weatherdata/Weather/"; # where do we put output?
+
+#--------------------------------------------------------------
+#	Read in arguments
+#--------------------------------------------------------------
+
+my $VERSION = "1.0";
+
+use  Getopt::Declare;
+
+my $specification = q(  
+[strict]
+[pvtype: date	/\d{1,2}\/\d{1,2}\/\d{4}/ {reject if (split('/',$_VAL_))[0]>12;
+                                      	   reject if (split('/',$_VAL_))[1]>31;
+											} ]
+
+--last <last:+i>	How many days previous
+
+--prefix <prefix:s>	output filename prefix [required]
+
+--type <type:/daily|weekly|monthly/>	Plot type (daily, weekly, monthly) 
+
+--todate <todate:date>	ending date (mm/dd/yyyy) 
+
+--fromdate <fromdate:date>	starting date (mm/dd/yyyy) 
+
+);
+
+my $args = new Getopt::Declare($specification);
+
+die if !$args;
+
+if (!defined $args->{'--type'}) {$args->{'--type'} = 'daily';}
+
+#--------------------------------------------------------------
+#	End of Read in arguments
+#--------------------------------------------------------------
+
+#	what is yesterday? 
+
+my ($yr, $mn, $dy) = Add_Delta_Days(Today(),-1);
+my ($from, $to);
+my $title;
+
+if (defined $args->{'--last'}) {
+	$to = $mn . "/" . $dy . "/" . $yr;
+	my ($yr2, $mn2, $dy2) = Add_Delta_Days($yr, $mn, $dy, -1*$args->{'--last'});
+	$from = $mn2 . "/" . $dy2 . "/" . $yr2;
+	$title = "<h1>Weather for the past $args->{'--last'} days, Houston, Texas</h1>";
+}
+elsif (!defined $args->{'--todate'}) {
+	$to = $mn . "/" . $dy . "/" . $yr;
+	$from = $args->{'--fromdate'};
+	$title = "<h1>Weather since $from, Houston, Texas</h1>";
+}
+elsif (defined $args->{'--fromdate'}) {
+	$to = $args->{'--todate'};
+	$from = $args->{'--fromdate'};
+	$title = "<h1>Weather from $from to $to, Houston, Texas</h1>";
+}
+else {
+	die "Must define --fromdate or --last at minimum\n";
+}
+
+print "From $from to $to\n";
+my $prefix = $args->{'--prefix'};
+my $type = $args->{'--type'};
+print "type = $type, prefix = $prefix\n";
+
+#	Create the plots
+
+chdir $wdir;
+print STDERR "/home/ajackson/bin/Wind_plots.pl --fromdate $from --todate $to --prefix $prefix --style tadpole --type $type\n";
+`/home/ajackson/bin/Wind_plots.pl --fromdate $from --todate $to --prefix $prefix --style tadpole --type $type`;
+`cp "$prefix"_Wind.png $web`;
+print STDERR "/home/ajackson/bin/Temp_hilo_plots.pl --fromdate $from --todate $to --prefix $prefix --type $type\n";
+`/home/ajackson/bin/Temp_hilo_plots.pl --fromdate $from --todate $to --prefix $prefix --type $type`;
+`cp "$prefix"_Temperature.png $web`;
+`cp "$prefix"_Pressure.png $web`;
+`cp "$prefix"_Humidity.png $web`;
+print STDERR "/home/ajackson/bin/Rain_plots.pl --fromdate $from --todate $to --prefix $prefix --sum_rate sum  --type $type\n";
+`/home/ajackson/bin/Rain_plots.pl --fromdate $from --todate $to --prefix $prefix --sum_rate sum  --type $type`;
+`cp "$prefix"_Rain.png $web`;
+
+#`/home/ajackson/bin/historical_wind_plots $from $to $args->{'prefix'} 90`;
+#`/home/ajackson/bin/historical_Temp_plots $from $to $args->{'prefix'} 90`;
+#`/home/ajackson/bin/historical_pressure_plots $from $to $args->{'prefix'} 90`;
+#`/home/ajackson/bin/historical_rain_plots $from $to $args->{'prefix'} 90`;
+
+#`cp $args->{'prefix'}*png /home/ajackson/mirrors/icct/weather/`;
+
+#	Build the webpage
+
+open (MINMAX,"<$wdir"."$prefix"."_tmaxmin") || die "Can't open $prefix _tmaxmin, $!\n";
+my @tmm = <MINMAX>;
+my $minmax = join('<p>',@tmm);
+close MINMAX;
+
+open (RAIN,"<$wdir"."$prefix"."_raintot") || die "Can't open $prefix _raintot, $!\n";
+my @raintot = <RAIN>;
+my $raintot = join('<p>',@raintot);
+close RAIN;
+
+open (WEB,">$web"."$prefix".".html") || die "Can't open $web $prefix.html, $!\n";
+while (<DATA>) {
+	if (/%%/) {
+		if (/%%month%%/) {
+			s/%%month%%/$from to $to/;
+		}
+		elsif (/%%minmaxt%%/) {
+			s/%%minmaxt%%/$minmax/;
+		}
+		elsif (/%%raintot%%/) {
+			s/%%raintot%%/$raintot/;
+		}
+		elsif (/%%prefix%%/) {
+			s/%%prefix%%/$prefix/;
+		}
+		elsif (/%%title%%/) {
+			s/%%title%%/$title/;
+		}
+	#	elsif (/%%press%%/) {
+	#		s/%%press%%/$press/;
+	#	}
+	}
+	print WEB $_;
+}
+
+1;
+__DATA__
+<html>
+<body background="cloud2.jpg">
+%%title%%
+<!-- ============ wind =============== -->
+<p>
+<table bgcolor="black">
+<tr><td><img src="%%prefix%%_Wind.png"></td></tr>
+<tr>
+<td>&nbsp;&nbsp;</td>
+</tr>
+</table>
+<!-- ============ Temperature =============== -->
+<p>
+<table bgcolor="black">
+<tr><td><img src="%%prefix%%_Temperature.png"></td></tr>
+<tr>
+<td>&nbsp;&nbsp;</td>
+</tr>
+<tr><td><center><font size=+1 color="white">%%minmaxt%%
+</font></center></td></tr>
+</table>
+<!-- ============ Humidity =============== -->
+<p>
+<table bgcolor="black">
+<tr><td><img src="%%prefix%%_Humidity.png"></td></tr>
+</tr>
+</table>
+<!-- ============ Pressure =============== -->
+<p>
+<table bgcolor="black">
+<tr><td><img src="%%prefix%%_Pressure.png"></td></tr>
+<tr>
+<td>&nbsp;&nbsp;</td>
+</tr>
+<!--
+<tr><td><center><font size=+1 color="white">%%press%%
+</font></center></td></tr>
+-->
+</table>
+<!-- ============ Rainfall =============== -->
+<p>
+<table bgcolor="black">
+<tr><td><img src="%%prefix%%_Rain.png"></td></tr>
+<tr>
+<td>&nbsp;&nbsp;</td>
+</tr>
+<tr><td><center><font size=+1 color="white">%%raintot%%
+</font></center></td></tr>
+</table>
+
+</body>
+</html>

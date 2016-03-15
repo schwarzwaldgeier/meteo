@@ -1,0 +1,18 @@
+To Do list
+
+- get better climate data from NOAA
+
+- improve labeling - time should round to nearest month/week/etc
+
+- Actually implement monthly plots
+
+- documentation
+
+- build tarball to install modules in usual places
+
+- Roses need *lots* of work. They need to be normalized, they need axes, more
+options, ...
+
+- color background on wind plot by temperature? or color compass direction,
+blue for a north wind, red for a south wind.
+

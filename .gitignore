@@ -1,4 +1,6 @@
-*/LOGS/*
+**/LOGS/*
+**/logs/*
+**/log/*
 /blib/
 /.build/
 _build/

@@ -1,0 +1,12 @@
+Try this for testing parts of it, anyway...
+
+% Pack_weather.pl arch990939620 .
+
+% Rain_plots.pl --fromdate 5/26/2001 --todate 5/26/2001 --sum_rate rate --type hourly --prefix testing
+% xv testing_Rain.png
+
+% Temp_plots.pl --fromdate 5/26/2001 --todate 5/26/2001 --type minutes --prefix testing
+% xv testing_Humidity.png testing_Temperature.png testing_Pressure.png
+
+% Wind_plots.pl --fromdate 5/26/2001 --todate 5/26/2001 --type minutes --prefix testing --style tadpole
+% xv testing_Wind.png
