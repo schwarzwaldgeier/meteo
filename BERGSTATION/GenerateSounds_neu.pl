@@ -174,22 +174,22 @@ $soundfile_onehundred = "/100.mus.wav";
 $soundfile_deviceFrozen = "/eis2.wav";
 #$soundfile_jhv2010 = "/jhv2010.wav";
 
-$args_phone = ("/usr/bin/shnjoin");
-$args_radio = ("/usr/bin/shnjoin");
+@args_phone = ("/usr/bin/shnjoin");
+@args_radio = ("/usr/bin/shnjoin");
 
-push $args_phone,"-Oalways";
-push $args_radio,"-Oalways";
-push $args_phone,"-aPHONE";
-push $args_radio,"-aFUNK";
-push $args_phone,"-d/var/www/BERGSTATION/";
-push $args_radio,"-d/var/www/BERGSTATION/";
-push $args_phone,"-rnone";
-push $args_radio,"-rnone";
-push $args_phone,"-q";
-push $args_radio,"-q";
+push @args_phone,"-Oalways";
+push @args_radio,"-Oalways";
+push @args_phone,"-aPHONE";
+push @args_radio,"-aFUNK";
+push @args_phone,"-d/var/www/BERGSTATION/";
+push @args_radio,"-d/var/www/BERGSTATION/";
+push @args_phone,"-rnone";
+push @args_radio,"-rnone";
+push @args_phone,"-q";
+push @args_radio,"-q";
 
-push $args_phone,$soundfile_phone.$soundfile_hello;
-push $args_radio,$soundfile_radio.$soundfile_hello;
+push @args_phone,$soundfile_phone.$soundfile_hello;
+push @args_radio,$soundfile_radio.$soundfile_hello;
 
 $content = get("http://localhost:81/wetterstation/phone_neu.php");
 
@@ -205,12 +205,12 @@ print "\n";
 
 
 if ((time - $a3) > 2300) {
-	push $args_phone,$soundfile_phone.$soundfile_outOfOrder;
-		push $args_radio,$soundfile_radio.$soundfile_outOfOrder;
+	push @args_phone,$soundfile_phone.$soundfile_outOfOrder;
+		push @args_radio,$soundfile_radio.$soundfile_outOfOrder;
 	print "WS gone?";
 #} elsif ($a1 == 0) {
-#    push $args_phone,$soundfile_phone.$soundfile_deviceFrozen;
-#		push $args_radio,$soundfile_radio . $soundfile_deviceFrozen;
+#    push @args_phone,$soundfile_phone.$soundfile_deviceFrozen;
+#		push @args_radio,$soundfile_radio . $soundfile_deviceFrozen;
 #    print "EIS???";
 } else {
     AddToSoundfile($soundfile_pause3, "both", 0);
@@ -301,13 +301,13 @@ AddToSoundfile($soundfile_bye, "both", 0);
 
 
 #print "\n\n";
-#foreach ($args_phone) {
+#foreach (@args_phone) {
 # 	print $_;
 #	print " ";
 # } 
 #print "\n\n";
 
-system($args_phone) == 0;
+system(@args_phone) == 0;
 #    or die "system @args failed: $?";
 	
 if ($? == -1) {
@@ -321,7 +321,7 @@ else {
 printf "child exited with value %d\n", $? >> 8;
 }	
 ####################
-system($args_radio) == 0;
+system(@args_radio) == 0;
 #    or die "system @args failed: $?";
 	
 if ($? == -1) {
@@ -338,7 +338,7 @@ printf "child exited with value %d\n", $? >> 8;
 	
 	
 
-#system($args_radio) == 0
+#system(@args_radio) == 0
  #   or die "system @args failed: $?";
 	
 	
@@ -389,18 +389,18 @@ sub AddToSoundfile
     
     if ($file == "phone" || $file == "both" )
     {
-        push $args_phone,$soundfile_phone.$sound;
+        push @args_phone,$soundfile_phone.$sound;
         if ($pause > 0)
         {
-            push $args_phone,$soundfile_phone.$pauseFile;}
+            push @args_phone,$soundfile_phone.$pauseFile;}
         
 
     }
     if ($file == "radio" || $file == "both" )
     {
-        push $args_radio,$soundfile_radio.$sound;
+        push @args_radio,$soundfile_radio.$sound;
         if ($pause > 0){
-            push $args_radio,$soundfile_radio.$pauseFile;
+            push @args_radio,$soundfile_radio.$pauseFile;
         }
     }
     
