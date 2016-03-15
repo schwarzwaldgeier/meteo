@@ -185,9 +185,10 @@ push @args_radio,"-rnone";
 push @args_phone,"-q";
 push @args_radio,"-q";
 
-push @args_phone,$soundfile_phone.$soundfile_hello;
-push @args_radio,$soundfile_radio.$soundfile_hello;
+### Greeting
+AddToSoundfile($soundfile_hello, "both", 3);
 
+### Collect and parse data
 $content = get("http://localhost:81/wetterstation/phone_neu.php");
 
 ($akt,$twenty,$hourly,$maxi) = split("x",$content);
@@ -200,62 +201,48 @@ print "\n";
 print time - $a3;
 print "\n";
 
-
+### Check age of last data and announce out of order
 if ((time - $a3) > 2300) {
-	push @args_phone,$soundfile_phone.$soundfile_outOfOrder;
-		push @args_radio,$soundfile_radio.$soundfile_outOfOrder;
-	print "WS gone?";
+    AddToSoundfile($soundfile_outOfOrder, "both", 3);
+    print "WS gone?";
 #} elsif ($a1 == 0) {
 #    push @args_phone,$soundfile_phone.$soundfile_deviceFrozen;
 #		push @args_radio,$soundfile_radio . $soundfile_deviceFrozen;
 #    print "EIS???";
 } else {
-    AddToSoundfile($soundfile_pause3, "both", 0);
     
-    AddToSoundfile($soundfile_currentWindspeed, "both", 2);    # Aktuelle Windstärke:
+    #### Current windspeed
+    
+    AddToSoundfile($soundfile_currentWindspeed, "both", 2);     # Aktuelle Windstärke:
     AddToSoundfile(&wdirection($a2), "both", 2);                # (Windrichtung)
-    
-  
 	if (length($a1) == 3) {
-        
         AddToSoundfile($soundfile_onehundred, "both", 0);       # einhundert ...
         AddToSoundfile($ws[substr($a1,1,2)], "both", 0);        # (Windgeschwindigkeit)
-
-       
     }  else {
         AddToSoundfile($ws[$a1], "both", 0);                    # (Windgeschwindigkeit)
     }
-	
     AddToSoundfile($soundfile_kmh, "both", 3);                  # km/h.
     
     
+    ### Last 20 minutes average windspeed
     AddToSoundfile($soundfile_lastTwentyMinutesWindspeed,
     "both", 2);                                                 # Durchschnittlicher Wind der letzten 20 Minuten:
-		
     ($a1,$a2) = split(",",$twenty);
-
     AddToSoundfile(&wdirection($a2), "both", 2);                # (Windrichtung)
-		
-    
     if (length($a1) == 3) {
-        
         AddToSoundfile($soundfile_onehundred, "both", 0);       # einhundert ...
         AddToSoundfile($ws[substr($a1,1,2)], "both", 0);        # (Windgeschwindigkeit)
-        
-      
     }  else {
          AddToSoundfile($ws[$a1], "both", 0);                   # (Windgeschwindigkeit)
     }
-
     AddToSoundfile($soundfile_kmh, "both", 3);                  # km/h.
 
+    
+    ### Strongest gust last 20 minutes
     AddToSoundfile($soundfile_gust, "both", 2);                 # Stärkste Windböe der letzten 20 Minuten:
-
     ($a1,$a2) = split(",",$maxi);
     $a2 =~ s/[^0-9]//igs;
-    #print "xxx" . $a2 . "xxx\n";
     $dummywd = &wdirection($a2);
-    
     AddToSoundfile($dummywd, "both", 2);                        # (Windrichtung)
     if (length($a1) == 3) {
             AddToSoundfile($soundfile_onehundred, "both", 0);   # einhundert ...
@@ -266,13 +253,11 @@ if ((time - $a3) > 2300) {
     }
     AddToSoundfile($soundfile_kmh, "both", 3);                  # km/h.
 
-	
+
+    ### Wind 1h ago
     AddToSoundfile($soundfile_windspeedOneHourAgo, "both", 2);  # Wind genau vor einer Stunde:
 		    ($a1,$a2) = split(",",$hourly);
-    #print "$a2 lllllll\n";
     AddToSoundfile(&wdirection($a2), "both", 2);                # (Windrichtung)
-		
-
     if (length($a1) == 3) {
         AddToSoundfile($soundfile_onehundred, "both", 0);       # einhundert ...
         AddToSoundfile($ws[substr($a1,1,2)], "both", 0);        # (Windgeschwindigkeit)
@@ -282,18 +267,16 @@ if ((time - $a3) > 2300) {
     }
     AddToSoundfile($soundfile_kmh, "both", 3);                  # km/h.
 
-    AddToSoundfile($soundfile_timePrefix, "phone", 0);           # Es ist
-    AddToSoundfile($ws[$hour], "phone", 0);                      # (Stunde)
-    AddToSoundfile($soundfile_timeInfix, "phone", 0);            # Uhr
-    AddToSoundfile($ws[$min], "phone", 3);                       # (Minute)
+    ### Current time
+    #AddToSoundfile($soundfile_timePrefix, "phone", 0);           # Es ist
+    #AddToSoundfile($ws[$hour], "phone", 0);                      # (Stunde)
+    #AddToSoundfile($soundfile_timeInfix, "phone", 0);            # Uhr
+    #AddToSoundfile($ws[$min], "phone", 3);                       # (Minute)
     
 }
 
-if ("$year$zmon$zday" < "20100205") {
-    AddToSoundfile($soundfile_jhv2010, "phone", 3);
-    print "JHV...";
-}
 
+### Say Goodbye
 AddToSoundfile($soundfile_bye, "both", 0);
 
 
@@ -367,6 +350,7 @@ sub wdirection() {
     return $wi;
 }
 
+# Append $sound to "phone", "radio" or "both" sound files plus a $pause ms pause.
 sub AddToSoundfile
 {
     my $sound = shift;
@@ -407,5 +391,4 @@ sub AddToSoundfile
     
 }
 
-#wavtopvf joined.wav | pvfspeed -s 7200 | pvftormd Elsa 4 > ../indikativ.rmd
 
