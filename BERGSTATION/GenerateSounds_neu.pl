@@ -285,10 +285,10 @@ if ((time - $a3) > 2300) {
     }
     AddToSoundfile($soundfile_kmh, "both", 3);                  # km/h.
 
-    AddToSoundfile($soundfile_timePrefix, "both", 0);           # Es ist
-    AddToSoundfile($ws[$hour], "both", 0);                      # (Stunde)
-    AddToSoundfile($soundfile_timeInfix, "both", 0);            # Uhr
-    AddToSoundfile($ws[$min], "both", 3);                       # (Minute)
+    AddToSoundfile($soundfile_timePrefix, "phone", 0);           # Es ist
+    AddToSoundfile($ws[$hour], "phone", 0);                      # (Stunde)
+    AddToSoundfile($soundfile_timeInfix, "phone", 0);            # Uhr
+    AddToSoundfile($ws[$min], "phone", 3);                       # (Minute)
     
 }
 
