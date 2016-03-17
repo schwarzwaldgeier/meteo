@@ -12,7 +12,7 @@ h3 {
 </head>
 <body>
 <?php
-
+include("credentials.php");
 $x = exec("uptime");
 $x = trim($x);
 $x = eregi_replace(" up ",",  uptime ",$x);
@@ -60,10 +60,10 @@ echo "</pre>";
 	$dbsel = $ok;
 	$lastw = $ok;
 
-    	$ahost		= "localhost:3306";
-    	$auser		= "wetter";
-    	$apassword	= "meinewelt";
-    	$adb			= "wetter";
+    	$ahost		= $wetterdb_host;
+    	$auser		= $wetterdb_user;
+    	$apassword	= $wetterdb_password;
+    	$adb		= $wetterdb_db;
     	$zumachen = @mysql_connect($ahost,$auser,$apassword) or $zumachen = "Fehler";
 		if ($zumachen == "Fehler") {
 			$dbconn = $fehler;

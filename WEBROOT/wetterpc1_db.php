@@ -2,6 +2,7 @@
 
 // Wetterstations-DB / PC 1
 // --------------------------------------------------------------------------------------------------------//
+	include("credentials.php");
 	$fehler = "<span style=\"color: #ff0000; font-weight: bold; font-size: 12px;\">FEHLER</span>";
 	$ok = "<span style=\"color: #006600; font-weight: bold; font-size: 12px;\">OKI</span>";
 	$meld = "<span style=\"color: #666600; font-weight: bold; font-size: 12px;\">HINWEIS</span>";
@@ -18,10 +19,10 @@
 	$dbsel = $ok;
 	$lastw = $ok;
 
-    	$ahost		= "localhost:3306";
-    	$auser		= "wetter";
-    	$apassword	= "meinewelt";
-    	$adb			= "wetter";
+    	$ahost		= $wetterdb_host;
+    	$auser		= $wetterdb_user;
+    	$apassword	= $wetterdb_password;
+    	$adb		= $wetterdb_db;
     	$zumachen = @mysql_connect($ahost,$auser,$apassword) or $zumachen = "Fehler";
 		if ($zumachen == "Fehler") {
 			$dbconn = $fehler;
