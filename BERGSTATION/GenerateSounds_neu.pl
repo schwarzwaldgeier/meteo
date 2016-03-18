@@ -186,16 +186,17 @@ AddToSoundfile($soundfile_hello, "both", 3);
 
 ### Collect and parse data
 $content = get("http://localhost:81/wetterstation/phone_neu.php");
+#$content = '12,354,1458308820x6,31x7,15x15,354'; # Test sample
 
 ($akt,$twenty,$hourly,$maxi) = split("x",$content);
 
 ($a1,$a2,$a3) = split(",",$akt);
-print time;
-print "\n";
-print $a3;
-print "\n";
-print time - $a3;
-print "\n";
+#print time;
+#print "\n";
+#print $a3;
+#print "\n";
+#print time - $a3;
+#print "\n";
 
 ### Check age of last data and announce out of order
 if ((time - $a3) > 2300) {
@@ -307,7 +308,7 @@ printf "child exited with value %d\n", $? >> 8;
 #system(@args_radio) == 0
  #   or die "system @args failed: $?";
 
-print "\n* Creating phone message ?not_sure_here?\n"
+print "\n* Creating phone message ?not_sure_here?\n";
 system("wavtopvf $phone_output_file | pvfspeed -s 7200 | pvftormd Elsa 4 > $phone_message_dir/indikativ.rmd");
 
 
