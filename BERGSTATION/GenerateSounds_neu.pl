@@ -311,6 +311,11 @@ printf "child exited with value %d\n", $? >> 8;
 print "\n* Creating phone message ?not_sure_here?\n";
 system("wavtopvf $phone_output_file | pvfspeed -s 7200 | pvftormd Elsa 4 > $phone_message_dir/indikativ.rmd");
 
+# TODO: @Seb here you can override the playback if you want
+# TODO: Error handling here
+# TODO: Remove entry from cronjob
+print "\n* Play radio file\n";
+system('/usr/bin/play /var/www/BERGSTATION/FUNK.wav');
 
 sub wdirection() {
     my $wdin = $_[0];
