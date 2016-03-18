@@ -45,22 +45,22 @@ $soundfile_workToDo = "/we-ae.mus.wav";
 $soundfile_website  = "/www.mus.wav";
 $soundfile_kmh      = "/kmh.mus.wav";
 
-$soundfile_windDirection_n      = "/r-n.mus.wav";
-$soundfile_windDirection_no     = "/r-no.mus.wav";
+$soundfile_windDirection_n          = "/r-n.mus.wav";
+$soundfile_windDirection_no         = "/r-no.mus.wav";
 $soundfile_windDirection_nno        = "/r-nno.mus.wav";
 $soundfile_windDirection_nnw        = "/r-nnw.mus.wav";
-$soundfile_windDirection_o      = "/r-o.mus.wav";
+$soundfile_windDirection_o          = "/r-o.mus.wav";
 $soundfile_windDirection_oso        = "/r-oso.mus.wav";
 $soundfile_windDirection_ono        = "/r-ono.mus.wav";
-$soundfile_windDirection_so     = "/r-so.mus.wav";
-$soundfile_windDirection_s      = "/r-s.mus.wav";
+$soundfile_windDirection_so         = "/r-so.mus.wav";
+$soundfile_windDirection_s          = "/r-s.mus.wav";
 $soundfile_windDirection_sso        = "/r-sso.mus.wav";
 $soundfile_windDirection_ssw        = "/r-ssw.mus.wav";
-$soundfile_windDirection_sw     = "/r-sw.mus.wav";
-$soundfile_windDirection_w      = "/r-w.mus.wav";
+$soundfile_windDirection_sw         = "/r-sw.mus.wav";
+$soundfile_windDirection_w          = "/r-w.mus.wav";
 $soundfile_windDirection_wsw        = "/r-wsw.mus.wav";
 $soundfile_windDirection_wnw        = "/r-wnw.mus.wav";
-$soundfile_windDirection_nw     = "/r-nw.mus.wav";
+$soundfile_windDirection_nw         = "/r-nw.mus.wav";
 
 @windspeed = ();
 @ws[0] = "/0.mus.wav";
@@ -170,6 +170,8 @@ $soundfile_deviceFrozen = "/eis2.wav";
 @args_phone = ("/usr/bin/shnjoin");
 @args_radio = ("/usr/bin/shnjoin");
 
+$isDataUpToDate;
+
 push @args_phone,"-Oalways";
 push @args_radio,"-Oalways";
 push @args_phone,"-aPHONE";
@@ -181,8 +183,7 @@ push @args_radio,"-rnone";
 push @args_phone,"-q";
 push @args_radio,"-q";
 
-### Greeting
-AddToSoundfile($soundfile_hello, "both", 3);
+
 
 ### Collect and parse data
 $content = get("http://localhost:81/wetterstation/phone_neu.php");
@@ -198,14 +199,21 @@ $content = get("http://localhost:81/wetterstation/phone_neu.php");
 #print time - $a3;
 #print "\n";
 
-### Check age of last data and announce out of order
+### Say hello, even if the station is out of order.
+AddToSoundfile($soundfile_hello, "both", 3);
+
+
+### Check if data is up to date and announce out of order if not.
 if ((time - $a3) > 2300) {
-    AddToSoundfile($soundfile_outOfOrder, "both", 3);
-    print "WS gone?";
-#} elsif ($a1 == 0) {
-#    push @args_phone,$phone_soundfiles_dir.$soundfile_deviceFrozen;
-#       push @args_radio,$radio_soundfiles_dir . $soundfile_deviceFrozen;
-#    print "EIS???";
+    print "No new data from station. Announcing out of order message.";
+    $isDataUpToDate = false;
+    AddToSoundfile($soundfile_outOfOrder, "both", 3);               # Die Wetterstation ist gerade leider außer Betrieb.
+    AddToSoundfile($soundfile_bye, "both", 0);                      # Tschüüß!
+    
+    #} elsif ($a1 == 0) {
+    #    push @args_phone,$phone_soundfiles_dir.$soundfile_deviceFrozen;
+    #       push @args_radio,$radio_soundfiles_dir . $soundfile_deviceFrozen;
+    #    print "EIS???";
 } else {
     
     #### Current windspeed
@@ -229,10 +237,10 @@ if ((time - $a3) > 2300) {
         AddToSoundfile($soundfile_onehundred, "both", 0);            # einhundert ...
         AddToSoundfile($ws[substr($a1,1,2)], "both", 0);             # (Windgeschwindigkeit)
     }  else {
-         AddToSoundfile($ws[$a1], "both", 0);                        # (Windgeschwindigkeit)
+        AddToSoundfile($ws[$a1], "both", 0);                        # (Windgeschwindigkeit)
     }
     AddToSoundfile($soundfile_kmh, "both", 3);                       # km/h.
-
+    
     
     ### Strongest gust last 20 minutes
     AddToSoundfile($soundfile_gust, "both", 2);                      # Stärkste Windböe der letzten 20 Minuten:
@@ -241,15 +249,15 @@ if ((time - $a3) > 2300) {
     $dummywd = &wdirection($a2);
     AddToSoundfile($dummywd, "both", 2);                             # (Windrichtung)
     if (length($a1) == 3) {
-            AddToSoundfile($soundfile_onehundred, "both", 0);        # einhundert ...
-            AddToSoundfile($ws[substr($a1,1,2)], "both", 0);         # (Windgeschwindigkeit)
-
+        AddToSoundfile($soundfile_onehundred, "both", 0);        # einhundert ...
+        AddToSoundfile($ws[substr($a1,1,2)], "both", 0);         # (Windgeschwindigkeit)
+        
     }  else {
         AddToSoundfile($ws[$a1], "both", 0);                         # (Windgeschwindigkeit)
     }
     AddToSoundfile($soundfile_kmh, "both", 3);                       # km/h.
-
-
+    
+    
     ### Wind 1h ago
     AddToSoundfile($soundfile_windspeedOneHourAgo, "both", 2);       # Wind genau vor einer Stunde:
     ($a1,$a2) = split(",",$hourly);
@@ -262,60 +270,64 @@ if ((time - $a3) > 2300) {
         AddToSoundfile($ws[$a1], "both", 0);                         # (Windgeschwindigkeit)
     }
     AddToSoundfile($soundfile_kmh, "both", 3);                       # km/h.
-
+    
     ### Current time
     #AddToSoundfile($soundfile_timePrefix, "phone", 0);                # Es ist
     #AddToSoundfile($ws[$hour], "phone", 0);                           # (Stunde)
     #AddToSoundfile($soundfile_timeInfix, "phone", 0);                 # Uhr
     #AddToSoundfile($ws[$min], "phone", 3);                            # (Minute)
     
+    ### Say Goodbye
+    AddToSoundfile($soundfile_bye, "both", 0);
+    
 }
 
-### Say Goodbye
-AddToSoundfile($soundfile_bye, "both", 0);
+
 
 print "\n* Creating phone file with:\n".join(" ", @args_phone)."\n";
 system(@args_phone) == 0;
 #    or die "system @args failed: $?";
-    
+
 if ($? == -1) {
-print "failed to execute: $!\n";
+    print "failed to execute: $!\n";
 }
 elsif ($? & 127) {
-printf "child died with signal %d, %s coredump\n",
-($? & 127), ($? & 128) ? 'with' : 'without';
+    printf "child died with signal %d, %s coredump\n",
+    ($? & 127), ($? & 128) ? 'with' : 'without';
 }
 else {
-printf "child exited with value %d\n", $? >> 8;
-}   
+    printf "child exited with value %d\n", $? >> 8;
+}
 ####################
 print "\n* Creating radio file with:\n".join(" ", @args_radio)."\n";
 system(@args_radio) == 0;
 #    or die "system @args failed: $?";
-    
+
 if ($? == -1) {
-print "failed to execute: $!\n";
+    print "failed to execute: $!\n";
 }
 elsif ($? & 127) {
-printf "child died with signal %d, %s coredump\n",
-($? & 127), ($? & 128) ? 'with' : 'without';
+    printf "child died with signal %d, %s coredump\n",
+    ($? & 127), ($? & 128) ? 'with' : 'without';
 }
 else {
-printf "child exited with value %d\n", $? >> 8;
-}   
+    printf "child exited with value %d\n", $? >> 8;
+}
 ####################
 
 #system(@args_radio) == 0
- #   or die "system @args failed: $?";
+#   or die "system @args failed: $?";
 
-print "\n* Creating phone message ?not_sure_here?\n";
+print "\n* Creating phone message \n";
 system("wavtopvf $phone_output_file | pvfspeed -s 7200 | pvftormd Elsa 4 > $phone_message_dir/indikativ.rmd");
 
-# TODO: @Seb here you can override the playback if you want
-# TODO: Error handling here
-# TODO: Remove entry from cronjob
-print "\n* Play radio file\n";
-system('/usr/bin/play /var/www/BERGSTATION/FUNK.wav');
+if ($isDataUpToDate){
+    print "\n* Broadcast radio message \n";
+    system('/usr/bin/play /var/www/BERGSTATION/FUNK.wav');
+}   else    {
+    print ("No new data from station. Skipping radio broadcast.")
+}
+
 
 sub wdirection() {
     my $wdin = $_[0];
@@ -342,13 +354,14 @@ sub wdirection() {
 }
 
 # Append $sound to "phone", "radio" or "both" sound files plus a $pause ms pause.
+# $pause must be 0 or a prime <=7 because whatever.
 sub AddToSoundfile
 {
     my $sound = shift;
     my $file = shift;
     my $pause = shift;
     my $pauseFile = $soundfile_pause0;
-
+    
     if ($pause==0) {$pauseFile == $soundfile_pause0;}
     if ($pause==2) {$pauseFile == $soundfile_pause2;}
     if ($pause==3) {$pauseFile == $soundfile_pause3;}
@@ -362,7 +375,7 @@ sub AddToSoundfile
             push @args_phone,$phone_soundfiles_dir.$pauseFile;
         }
     }
-
+    
     if ($file == "radio" || $file == "both" ) {
         push @args_radio,$radio_soundfiles_dir.$sound;
         if ($pause > 0){
