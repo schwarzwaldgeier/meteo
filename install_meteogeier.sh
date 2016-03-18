@@ -15,3 +15,4 @@ perl -MCPAN -e'install "LWP::Simple"'
 
 # Set up directories
 mkdir -p /var/spool/voice/messages
+chmod 777 /var/spool/voice/messages
