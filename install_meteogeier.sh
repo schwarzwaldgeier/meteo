@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
-WWW_USER=vagrant
 
-PACKAGES='apache2 git vim'
+PACKAGES='mysql-server mysql-client sox'
 
 apt-get install -y $PACKAGES
 #if ! [ -L /var/www ]; then
