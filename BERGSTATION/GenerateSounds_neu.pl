@@ -13,57 +13,54 @@ $zmon = $mon;
 if (length($zmon) < 2) { $zmon = "0$zmon"; }
 
 
-$soundfile_phone = "/var/www/BERGSTATION/soundfiles/phone";
-$soundfile_radio = "/var/www/BERGSTATION/soundfiles/funk";
-$op = "/var/spool/voice/messages";
-$of = "/var/www/BERGSTATION/soundfiles/funk";
-$jwp  = "/var/www/BERGSTATION/PHONE.wav";
-$jwf  = "/var/www/BERGSTATION/FUNK.wav";
+$phone_soundfiles_dir = "/var/www/BERGSTATION/soundfiles/phone";
+$radio_soundfiles_dir = "/var/www/BERGSTATION/soundfiles/funk";
+$phone_output_file  = "/var/www/BERGSTATION/PHONE.wav";
+$radio_output_file  = "/var/www/BERGSTATION/FUNK.wav";
+$phone_message_dir = "/var/spool/voice/messages";
 
 # These wave files include no sound at various lengths.
-$soundfile_pause0	= "/p0.mus.wav";
-$soundfile_pause2	= "/p0.mus.wav";
-$soundfile_pause3	= "/p3.mus.wav";
-$soundfile_pause5	= "/p5.mus.wav";
-$soundfile_pause7	= "/p7.mus.wav";
+$soundfile_pause0   = "/p0.mus.wav";
+$soundfile_pause2   = "/p0.mus.wav";
+$soundfile_pause3   = "/p3.mus.wav";
+$soundfile_pause5   = "/p5.mus.wav";
+$soundfile_pause7   = "/p7.mus.wav";
 
-$soundfile_outOfOrder	= "/out-of-order.mus.wav";
-
-$soundfile_currentWindspeed	= "/w-aktuell.mus.wav";
-$soundfile_lastTwentyMinutesWindspeed	= "/w-20.mus.wav";
-$soundfile_windspeedOneHourAgo	= "/w-1h.mus.wav";
-$soundfile_gust	= "/boe1.mus.wav";
 $soundfile_outOfOrder = "/out-of-order.mus.wav";
-#$soundfile_jhv = "/jhv-7200.wav";
 
-#$soundfile_timePrefix		= "/es-ist.mus.wav";
-#$soundfile_timeInfix 		= "/uhr.mus.wav";
+$soundfile_currentWindspeed = "/w-aktuell.mus.wav";
+$soundfile_lastTwentyMinutesWindspeed   = "/w-20.mus.wav";
+$soundfile_windspeedOneHourAgo  = "/w-1h.mus.wav";
+$soundfile_gust = "/boe1.mus.wav";
+$soundfile_outOfOrder = "/out-of-order.mus.wav";
 
-$stager		= "/stager.mus.wav";
-$soundfile_hello	= "/indi.mus.wav";
-$soundfile_bye		= "/bye.mus.wav";
+$soundfile_timePrefix  = "/es-ist.mus.wav";
+$soundfile_timeInfix   = "/uhr.mus.wav";
 
-$soundfile_workToDo		= "/we-ae.mus.wav";
-$soundfile_website	= "/www.mus.wav";
+$stager     = "/stager.mus.wav";
 
-$soundfile_kmh		= "/kmh.mus.wav";
+$soundfile_hello    = "/indi.mus.wav";
+$soundfile_bye      = "/bye.mus.wav";
+$soundfile_workToDo = "/we-ae.mus.wav";
+$soundfile_website  = "/www.mus.wav";
+$soundfile_kmh      = "/kmh.mus.wav";
 
-$soundfile_windDirection_n		= "/r-n.mus.wav";
-$soundfile_windDirection_no		= "/r-no.mus.wav";
-$soundfile_windDirection_nno		= "/r-nno.mus.wav";
-$soundfile_windDirection_nnw		= "/r-nnw.mus.wav";
-$soundfile_windDirection_o		= "/r-o.mus.wav";
-$soundfile_windDirection_oso		= "/r-oso.mus.wav";
-$soundfile_windDirection_ono		= "/r-ono.mus.wav";
-$soundfile_windDirection_so		= "/r-so.mus.wav";
-$soundfile_windDirection_s		= "/r-s.mus.wav";
-$soundfile_windDirection_sso		= "/r-sso.mus.wav";
-$soundfile_windDirection_ssw		= "/r-ssw.mus.wav";
-$soundfile_windDirection_sw		= "/r-sw.mus.wav";
-$soundfile_windDirection_w		= "/r-w.mus.wav";
-$soundfile_windDirection_wsw		= "/r-wsw.mus.wav";
-$soundfile_windDirection_wnw		= "/r-wnw.mus.wav";
-$soundfile_windDirection_nw		= "/r-nw.mus.wav";
+$soundfile_windDirection_n      = "/r-n.mus.wav";
+$soundfile_windDirection_no     = "/r-no.mus.wav";
+$soundfile_windDirection_nno        = "/r-nno.mus.wav";
+$soundfile_windDirection_nnw        = "/r-nnw.mus.wav";
+$soundfile_windDirection_o      = "/r-o.mus.wav";
+$soundfile_windDirection_oso        = "/r-oso.mus.wav";
+$soundfile_windDirection_ono        = "/r-ono.mus.wav";
+$soundfile_windDirection_so     = "/r-so.mus.wav";
+$soundfile_windDirection_s      = "/r-s.mus.wav";
+$soundfile_windDirection_sso        = "/r-sso.mus.wav";
+$soundfile_windDirection_ssw        = "/r-ssw.mus.wav";
+$soundfile_windDirection_sw     = "/r-sw.mus.wav";
+$soundfile_windDirection_w      = "/r-w.mus.wav";
+$soundfile_windDirection_wsw        = "/r-wsw.mus.wav";
+$soundfile_windDirection_wnw        = "/r-wnw.mus.wav";
+$soundfile_windDirection_nw     = "/r-nw.mus.wav";
 
 @windspeed = ();
 @ws[0] = "/0.mus.wav";
@@ -169,7 +166,6 @@ $soundfile_windDirection_nw		= "/r-nw.mus.wav";
 @ws[999] = "/eins.mus.wav";
 $soundfile_onehundred = "/100.mus.wav";
 $soundfile_deviceFrozen = "/eis2.wav";
-#$soundfile_jhv2010 = "/jhv2010.wav";
 
 @args_phone = ("/usr/bin/shnjoin");
 @args_radio = ("/usr/bin/shnjoin");
@@ -206,90 +202,81 @@ if ((time - $a3) > 2300) {
     AddToSoundfile($soundfile_outOfOrder, "both", 3);
     print "WS gone?";
 #} elsif ($a1 == 0) {
-#    push @args_phone,$soundfile_phone.$soundfile_deviceFrozen;
-#		push @args_radio,$soundfile_radio . $soundfile_deviceFrozen;
+#    push @args_phone,$phone_soundfiles_dir.$soundfile_deviceFrozen;
+#       push @args_radio,$radio_soundfiles_dir . $soundfile_deviceFrozen;
 #    print "EIS???";
 } else {
     
     #### Current windspeed
     
-    AddToSoundfile($soundfile_currentWindspeed, "both", 2);     # Aktuelle Windstärke:
-    AddToSoundfile(&wdirection($a2), "both", 2);                # (Windrichtung)
-	if (length($a1) == 3) {
-        AddToSoundfile($soundfile_onehundred, "both", 0);       # einhundert ...
-        AddToSoundfile($ws[substr($a1,1,2)], "both", 0);        # (Windgeschwindigkeit)
+    AddToSoundfile($soundfile_currentWindspeed, "both", 2);          # Aktuelle Windstärke:
+    AddToSoundfile(&wdirection($a2), "both", 2);                     # (Windrichtung)
+    if (length($a1) == 3) {
+        AddToSoundfile($soundfile_onehundred, "both", 0);            # einhundert ...
+        AddToSoundfile($ws[substr($a1,1,2)], "both", 0);             # (Windgeschwindigkeit)
     }  else {
-        AddToSoundfile($ws[$a1], "both", 0);                    # (Windgeschwindigkeit)
+        AddToSoundfile($ws[$a1], "both", 0);                         # (Windgeschwindigkeit)
     }
-    AddToSoundfile($soundfile_kmh, "both", 3);                  # km/h.
+    AddToSoundfile($soundfile_kmh, "both", 3);                       # km/h.
     
     
     ### Last 20 minutes average windspeed
-    AddToSoundfile($soundfile_lastTwentyMinutesWindspeed,
-    "both", 2);                                                 # Durchschnittlicher Wind der letzten 20 Minuten:
+    AddToSoundfile($soundfile_lastTwentyMinutesWindspeed, "both", 2);# Durchschnittlicher Wind der letzten 20 Minuten:
     ($a1,$a2) = split(",",$twenty);
-    AddToSoundfile(&wdirection($a2), "both", 2);                # (Windrichtung)
+    AddToSoundfile(&wdirection($a2), "both", 2);                     # (Windrichtung)
     if (length($a1) == 3) {
-        AddToSoundfile($soundfile_onehundred, "both", 0);       # einhundert ...
-        AddToSoundfile($ws[substr($a1,1,2)], "both", 0);        # (Windgeschwindigkeit)
+        AddToSoundfile($soundfile_onehundred, "both", 0);            # einhundert ...
+        AddToSoundfile($ws[substr($a1,1,2)], "both", 0);             # (Windgeschwindigkeit)
     }  else {
-         AddToSoundfile($ws[$a1], "both", 0);                   # (Windgeschwindigkeit)
+         AddToSoundfile($ws[$a1], "both", 0);                        # (Windgeschwindigkeit)
     }
-    AddToSoundfile($soundfile_kmh, "both", 3);                  # km/h.
+    AddToSoundfile($soundfile_kmh, "both", 3);                       # km/h.
 
     
     ### Strongest gust last 20 minutes
-    AddToSoundfile($soundfile_gust, "both", 2);                 # Stärkste Windböe der letzten 20 Minuten:
+    AddToSoundfile($soundfile_gust, "both", 2);                      # Stärkste Windböe der letzten 20 Minuten:
     ($a1,$a2) = split(",",$maxi);
     $a2 =~ s/[^0-9]//igs;
     $dummywd = &wdirection($a2);
-    AddToSoundfile($dummywd, "both", 2);                        # (Windrichtung)
+    AddToSoundfile($dummywd, "both", 2);                             # (Windrichtung)
     if (length($a1) == 3) {
-            AddToSoundfile($soundfile_onehundred, "both", 0);   # einhundert ...
-            AddToSoundfile($ws[substr($a1,1,2)], "both", 0);    # (Windgeschwindigkeit)
+            AddToSoundfile($soundfile_onehundred, "both", 0);        # einhundert ...
+            AddToSoundfile($ws[substr($a1,1,2)], "both", 0);         # (Windgeschwindigkeit)
 
     }  else {
-        AddToSoundfile($ws[$a1], "both", 0);                    # (Windgeschwindigkeit)
+        AddToSoundfile($ws[$a1], "both", 0);                         # (Windgeschwindigkeit)
     }
-    AddToSoundfile($soundfile_kmh, "both", 3);                  # km/h.
+    AddToSoundfile($soundfile_kmh, "both", 3);                       # km/h.
 
 
     ### Wind 1h ago
-    AddToSoundfile($soundfile_windspeedOneHourAgo, "both", 2);  # Wind genau vor einer Stunde:
-		    ($a1,$a2) = split(",",$hourly);
-    AddToSoundfile(&wdirection($a2), "both", 2);                # (Windrichtung)
+    AddToSoundfile($soundfile_windspeedOneHourAgo, "both", 2);       # Wind genau vor einer Stunde:
+    ($a1,$a2) = split(",",$hourly);
+    AddToSoundfile(&wdirection($a2), "both", 2);                     # (Windrichtung)
     if (length($a1) == 3) {
-        AddToSoundfile($soundfile_onehundred, "both", 0);       # einhundert ...
-        AddToSoundfile($ws[substr($a1,1,2)], "both", 0);        # (Windgeschwindigkeit)
+        AddToSoundfile($soundfile_onehundred, "both", 0);            # einhundert ...
+        AddToSoundfile($ws[substr($a1,1,2)], "both", 0);             # (Windgeschwindigkeit)
         
     }  else {
-        AddToSoundfile($ws[$a1], "both", 0);                    # (Windgeschwindigkeit)
+        AddToSoundfile($ws[$a1], "both", 0);                         # (Windgeschwindigkeit)
     }
-    AddToSoundfile($soundfile_kmh, "both", 3);                  # km/h.
+    AddToSoundfile($soundfile_kmh, "both", 3);                       # km/h.
 
     ### Current time
-    #AddToSoundfile($soundfile_timePrefix, "phone", 0);           # Es ist
-    #AddToSoundfile($ws[$hour], "phone", 0);                      # (Stunde)
-    #AddToSoundfile($soundfile_timeInfix, "phone", 0);            # Uhr
-    #AddToSoundfile($ws[$min], "phone", 3);                       # (Minute)
+    #AddToSoundfile($soundfile_timePrefix, "phone", 0);                # Es ist
+    #AddToSoundfile($ws[$hour], "phone", 0);                           # (Stunde)
+    #AddToSoundfile($soundfile_timeInfix, "phone", 0);                 # Uhr
+    #AddToSoundfile($ws[$min], "phone", 3);                            # (Minute)
     
 }
-
 
 ### Say Goodbye
 AddToSoundfile($soundfile_bye, "both", 0);
 
-
-#print "\n\n";
-#foreach (@args_phone) {
-# 	print $_;
-#	print " ";
-# } 
-#print "\n\n";
-
+print "\n* Creating phone file with:\n".join(" ", @args_phone)."\n";
 system(@args_phone) == 0;
 #    or die "system @args failed: $?";
-	
+    
 if ($? == -1) {
 print "failed to execute: $!\n";
 }
@@ -299,11 +286,12 @@ printf "child died with signal %d, %s coredump\n",
 }
 else {
 printf "child exited with value %d\n", $? >> 8;
-}	
+}   
 ####################
+print "\n* Creating radio file with:\n".join(" ", @args_radio)."\n";
 system(@args_radio) == 0;
 #    or die "system @args failed: $?";
-	
+    
 if ($? == -1) {
 print "failed to execute: $!\n";
 }
@@ -313,17 +301,14 @@ printf "child died with signal %d, %s coredump\n",
 }
 else {
 printf "child exited with value %d\n", $? >> 8;
-}	
-####################		
-	
-	
+}   
+####################
 
 #system(@args_radio) == 0
  #   or die "system @args failed: $?";
-	
-	
-#print "wavtopvf $jwp | pvfspeed -s 7200 | pvftormd Elsa 4 > $op/indikativ.rmd";
-system("wavtopvf $jwp | pvfspeed -s 7200 | pvftormd Elsa 4 > $op/indikativ.rmd");
+
+print "\n* Creating phone message ?not_sure_here?\n"
+system("wavtopvf $phone_output_file | pvfspeed -s 7200 | pvftormd Elsa 4 > $phone_message_dir/indikativ.rmd");
 
 
 sub wdirection() {
@@ -357,38 +342,25 @@ sub AddToSoundfile
     my $file = shift;
     my $pause = shift;
     my $pauseFile = $soundfile_pause0;
-    
-    
-        if ($pause==0)   {$pauseFile == $soundfile_pause0;}
-        if ($pause==2)   {$pauseFile == $soundfile_pause2;}
-        if ($pause==3)   {$pauseFile == $soundfile_pause3;}
-        if ($pause==5)   {$pauseFile == $soundfile_pause5;}
-        if ($pause==7)   {$pauseFile == $soundfile_pause7;}
-        else {$pauseFile ==   $soundfile_pause2;}
-    
-    
-    
-    if ($file == "phone" || $file == "both" )
-    {
-        push @args_phone,$soundfile_phone.$sound;
-        if ($pause > 0)
-        {
-            push @args_phone,$soundfile_phone.$pauseFile;}
-        
 
-    }
-    if ($file == "radio" || $file == "both" )
-    {
-        push @args_radio,$soundfile_radio.$sound;
-        if ($pause > 0){
-            push @args_radio,$soundfile_radio.$pauseFile;
+    if ($pause==0) {$pauseFile == $soundfile_pause0;}
+    if ($pause==2) {$pauseFile == $soundfile_pause2;}
+    if ($pause==3) {$pauseFile == $soundfile_pause3;}
+    if ($pause==5) {$pauseFile == $soundfile_pause5;}
+    if ($pause==7) {$pauseFile == $soundfile_pause7;}
+    else {$pauseFile ==   $soundfile_pause2;}
+    
+    if ($file == "phone" || $file == "both" ) {
+        push @args_phone,$phone_soundfiles_dir.$sound;
+        if ($pause > 0) {
+            push @args_phone,$phone_soundfiles_dir.$pauseFile;
         }
     }
-    
-    
-    
-    
-    
+
+    if ($file == "radio" || $file == "both" ) {
+        push @args_radio,$radio_soundfiles_dir.$sound;
+        if ($pause > 0){
+            push @args_radio,$radio_soundfiles_dir.$pauseFile;
+        }
+    }
 }
-
-
