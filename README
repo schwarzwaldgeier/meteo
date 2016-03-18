@@ -1,0 +1,9 @@
+# Meteogeier
+
+Interface for a WMR928 weather station for paragliders.
+
+Features includes:
+
+* Telephone interface
+* Radio broadcasting
+* Wind charts generation
