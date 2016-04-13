@@ -313,7 +313,7 @@ system("wavtopvf $phone_output_file | pvfspeed -s 7200 | pvftormd Elsa 4 > $phon
 
 # TODO: @Seb here you can override the playback if you want
 # TODO: Error handling here
-print "\n* Play radio file\n";
+print "\n* Play radio file. This takes a while...\n";
 system('/usr/bin/play -q /var/www/BERGSTATION/FUNK.wav');  # -q: quiet, no output
 
 sub wdirection() {
