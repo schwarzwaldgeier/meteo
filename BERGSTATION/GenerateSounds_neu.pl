@@ -313,7 +313,6 @@ system("wavtopvf $phone_output_file | pvfspeed -s 7200 | pvftormd Elsa 4 > $phon
 
 # TODO: @Seb here you can override the playback if you want
 # TODO: Error handling here
-# TODO: Remove entry from cronjob
 print "\n* Play radio file\n";
 system('/usr/bin/play /var/www/BERGSTATION/FUNK.wav');
 
