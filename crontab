@@ -19,7 +19,7 @@ PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 0,5,10,15,20,25,30,35,40,45,50,55 *    * * * root /var/www/BERGSTATION/GenerateSounds_neu.pl
 
 # Sprachausgabe Funk, hier auskommentieren
- 1,6,11,16,21,26,31,36,41,46,51,56 9-20 * * * root /usr/bin/play /var/www/BERGSTATION/FUNK.wav
+# 1,6,11,16,21,26,31,36,41,46,51,56 9-20 * * * root /usr/bin/play /var/www/BERGSTATION/FUNK.wav
 
 # Restart Service SOCKET
 */15 * * * * root /var/www/BERGSTATION/wetterstation_neu/./wetter_restart
