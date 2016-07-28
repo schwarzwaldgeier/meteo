@@ -201,8 +201,8 @@ $content = get("http://localhost:81/wetterstation/phone_neu.php");
 #print time - $a3;
 #print "\n";
 
-### Check age of last data and announce out of order
-if ((time - $a3) > 2300) {
+### Check age of last data and announce out of order after 15 minutes
+if ((time - $a3) > 900) {
     # This audio says 'tschüs' so no need to add a goodbye afterwards
     AddToSoundfile($soundfile_outOfOrder, "both", 3);  
     print "WS gone?";
