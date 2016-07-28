@@ -40,10 +40,16 @@ $soundfile_timeInfix   = "/uhr.mus.wav";
 $stager     = "/stager.mus.wav";
 
 $soundfile_hello    = "/indi.mus.wav";
-$soundfile_bye      = "/bye.mus.wav";
 $soundfile_workToDo = "/we-ae.mus.wav";
 $soundfile_website  = "/www.mus.wav";
 $soundfile_kmh      = "/kmh.mus.wav";
+
+# WTF: funk and phone differs:
+#   funk: -"Tschüüüüüs"
+#   phone: -"Guten Flug und happy Landings"
+$soundfile_bye      = "/bye.mus.wav";  
+# Overwritting setting to get a coherent behaviour
+$soundfile_bye      = "/tschuess.mus.wav";  
 
 $soundfile_windDirection_n      = "/r-n.mus.wav";
 $soundfile_windDirection_no     = "/r-no.mus.wav";
@@ -63,7 +69,7 @@ $soundfile_windDirection_wnw        = "/r-wnw.mus.wav";
 $soundfile_windDirection_nw     = "/r-nw.mus.wav";
 
 @windspeed = ();
-@ws[0] = "/0.mus.wav";
+@ws[0] = "/0.mus.wav";  # WTF! this audio file is the same file as 1.mus.wav
 @ws[1] = "/1.mus.wav";
 @ws[2] = "/2.mus.wav";
 @ws[3] = "/3.mus.wav";
