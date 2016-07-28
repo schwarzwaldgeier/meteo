@@ -187,9 +187,6 @@ push @args_radio,"-rnone";
 push @args_phone,"-q";
 push @args_radio,"-q";
 
-### Greeting
-AddToSoundfile($soundfile_hello, "both", 3);
-
 ### Collect and parse data
 $content = get("http://localhost:81/wetterstation/phone_neu.php");
 #$content = '12,354,1458308820x6,31x7,15x15,354'; # Test sample
@@ -206,16 +203,18 @@ $content = get("http://localhost:81/wetterstation/phone_neu.php");
 
 ### Check age of last data and announce out of order
 if ((time - $a3) > 2300) {
-    AddToSoundfile($soundfile_outOfOrder, "both", 3);
+    # This audio says 'tschüs' so no need to add a goodbye afterwards
+    AddToSoundfile($soundfile_outOfOrder, "both", 3);  
     print "WS gone?";
 #} elsif ($a1 == 0) {
 #    push @args_phone,$phone_soundfiles_dir.$soundfile_deviceFrozen;
 #       push @args_radio,$radio_soundfiles_dir . $soundfile_deviceFrozen;
 #    print "EIS???";
 } else {
+    ### Greeting
+    AddToSoundfile($soundfile_hello, "both", 3);
     
     #### Current windspeed
-    
     AddToSoundfile($soundfile_currentWindspeed, "both", 2);          # Aktuelle Windstärke:
     AddToSoundfile(&wdirection($a2), "both", 2);                     # (Windrichtung)
     if (length($a1) == 3) {
@@ -274,11 +273,10 @@ if ((time - $a3) > 2300) {
     #AddToSoundfile($ws[$hour], "phone", 0);                           # (Stunde)
     #AddToSoundfile($soundfile_timeInfix, "phone", 0);                 # Uhr
     #AddToSoundfile($ws[$min], "phone", 3);                            # (Minute)
-    
-}
 
-### Say Goodbye
-AddToSoundfile($soundfile_bye, "both", 0);
+    ### Say Goodbye
+    AddToSoundfile($soundfile_bye, "both", 0);
+}
 
 print "\n* Creating phone file with:\n".join(" ", @args_phone)."\n";
 system(@args_phone) == 0;
@@ -317,8 +315,6 @@ printf "child exited with value %d\n", $? >> 8;
 print "\n* Creating phone message ?not_sure_here?\n";
 system("wavtopvf $phone_output_file | pvfspeed -s 7200 | pvftormd Elsa 4 > $phone_message_dir/indikativ.rmd");
 
-# TODO: @Seb here you can override the playback if you want
-# TODO: Error handling here
 print "\n* Play radio file. This takes a while... (audio file can be long)\n";
 system('/usr/bin/play -q /var/www/BERGSTATION/FUNK.wav');  # -q: quiet, no output
 
