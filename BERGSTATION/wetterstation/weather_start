@@ -1,9 +1,0 @@
-#!/usr/bin/perl
-$i = 0;
-while ($i != -1) {
-    system("/var/www/BERGSTATION/wetterstation/weather_clean -p");
-    wait;
-    if ($? != (-1)) {
-	system("kill int($?)");
-    }
-}
