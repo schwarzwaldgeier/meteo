@@ -1,0 +1,11 @@
+#!/bin/bash
+BINARY=/var/www/BERGSTATION/WETTER_SOCKET_maxi.py
+PID_FILE=/var/run/wetterstation.pid
+
+# source sensitive data
+set -e; source /var/www/.sensitive; set +e 
+
+# Detach and demonize
+echo "* Starting $BINARY ..."
+nohup $BINARY >>/var/log/wetterstation/wetterstation_daemon.log 2>&1 & echo $! >$PID_FILE
+
