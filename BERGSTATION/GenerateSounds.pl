@@ -204,7 +204,10 @@ $content = get("http://localhost:81/wetterstation/phone_neu.php");
 ### Check age of last data and announce out of order after 15 minutes
 if ((time - $a3) > 900) {
     # This audio says 'tschüs' so no need to add a goodbye afterwards
-    AddToSoundfile($soundfile_outOfOrder, "both", 3);  
+    AddToSoundfile($soundfile_outOfOrder, "phone", 3);  
+
+    # Don't say anything on the radio
+    AddToSoundfile($soundfile_pause0, "radio", 1);  
     print "WS gone?";
 #} elsif ($a1 == 0) {
 #    push @args_phone,$phone_soundfiles_dir.$soundfile_deviceFrozen;
@@ -315,8 +318,13 @@ printf "child exited with value %d\n", $? >> 8;
 print "\n* Creating phone message ?not_sure_here?\n";
 system("wavtopvf $phone_output_file | pvfspeed -s 7200 | pvftormd Elsa 4 > $phone_message_dir/indikativ.rmd");
 
+if ((time - $a3) < 900) {
 print "\n* Play radio file. This takes a while... (audio file can be long)\n";
 system('/usr/bin/play -q /var/www/BERGSTATION/FUNK.wav');  # -q: quiet, no output
+}
+else {
+print "\n* Audio playback for (RADIO) skiped\n";
+}
 
 sub wdirection() {
     my $wdin = $_[0];
