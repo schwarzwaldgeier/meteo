@@ -12,12 +12,12 @@ PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 25 6	* * *	root	test -x /usr/sbin/anacron || ( cd / && run-parts --report /etc/cron.daily )
 47 6	* * 7	root	test -x /usr/sbin/anacron || ( cd / && run-parts --report /etc/cron.weekly )
 52 6	1 * *	root	test -x /usr/sbin/anacron || ( cd / && run-parts --report /etc/cron.monthly )
-* *	* * *	root	chmod 755 /bin/chmod 755 /var/log/mgetty/vg_ttyS0.log
+* *	* * *	    root	chmod 755 /bin/chmod 755 /var/log/mgetty/vg_ttyS0.log
 
-# This script prepares the sound files for telephone and radio and 
-# IT AUTOMATICALLY plays the radio file
-0,5,10,15,20,25,30,35,40,45,50,55 *    * * * root /var/www/BERGSTATION/GenerateSounds_neu.pl
+# Prepares sound files for telephone and radio 
+# NOTE: IT AUTOMATICALLY plays the radio file
+0,5,10,15,20,25,30,35,40,45,50,55 *    * * * root /var/www/BERGSTATION/GenerateSounds.pl
 
-# Restart Service SOCKET
-*/15 * * * * root /var/www/BERGSTATION/wetterstation_neu/./wetter_restart
-
+# Monitor the state of the weather station. If no new data it alarms and
+# initiates corrective actions
+*/2 * * * *     root    /var/www/BERGSTATION/monitor/check_station.sh >>/var/log/wetterstation/check_station.log 2>&1
