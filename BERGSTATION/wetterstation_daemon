@@ -1,5 +1,5 @@
 #!/bin/bash
-BINARY=/var/www/BERGSTATION/WETTER_SOCKET_maxi.py
+BINARY=/var/www/BERGSTATION/WETTER_SOCKET
 PID_FILE=/var/run/wetterstation.pid
 
 # source sensitive data

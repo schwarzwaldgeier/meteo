@@ -1,110 +1,113 @@
-#!/usr/bin/perl
-use IO::Socket::INET;
-use LWP::Simple;
-use Time::localtime;
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+import base64
+import os
+import re
+import signal
+import SocketServer
+import sys
+import urllib2
 
-# Letzte Aenderung: 2014_03_04 Timm: Windrichtung nich feststellbar
+HOST, PORT = "192.168.1.13", 7977
 
-my ($logfile, $logpath);
-$logpath = '/var/www/BERGSTATION/wetterstation_neu/logs';
+# Factors calculated by Timm
+WIND_SCALING_FACTOR=1.35  # To compensate the conical effect of Merkur
+WIND_OFFSET=16            # Deviation of nord, montage can't be perfect
 
-# flush after every write
-$| = 1;
-my ($socket,$client_socket);
-my ($peeraddress,$peerport);
-# creating object interface of IO::Socket::INET modules which internally does
-# socket creation, binding and listening at the specified port address.
+def handle_signal(signal, frame):
+        print('! Recieved signal to stop (%s). Quitting...' % signal)
+        sys.exit(0)
 
+def load_urls_from_env(key_list):
+    urls = []
+    for key in key_list:
+        prefix = 'SENSITIVE_%s' % key
+        try:
+            url=os.getenv(prefix + '_URL', None)
+            assert url != None
+            user=os.getenv(prefix + '_USER', None)
+            password=os.getenv(prefix + '_PW', None)
+            urls.append((key, url, user, password))
+        except AssertionError:
+            print "Could not find url in env:'%s'" % key 
+            raise
+    return urls
 
-$socket = new IO::Socket::INET (
-LocalHost => '192.168.1.13',
-LocalPort => '7977',
-Proto => 'tcp',
-Listen => 5,
-Reuse => 1
-    ) or die "ERROR in Socket Creation : $!\n";
+class ParseAndPush(SocketServer.BaseRequestHandler):
+    @staticmethod
+    def clean(string):
+        return re.sub("[^0-9\.\,:-]", "", string)
 
+    def handle(self):
+        # self.request is the TCP socket connected to the client
+        self.data = self.request.recv(1024).strip().split(',')
+        # Example output:
+        # 18:27:00, 28.07.16, TE18.44, DR1017.07, FE50.61, WS47.29, WD37.96, WC11.10, WV298.45, 
+        # 18:28:00, 28.07.16, TE18.13, DR1017.25, FE51.96, WS47.29, WD36.40, WC11.15, WV302.69, 
+        # 18:29:00, 28.07.16, TE17.85, DR1017.12, FE53.93, WS44.10, WD38.11, WC10.45, WV280.93, 
+        #
+        # and splitted:
+        #['18:24:00', ' 28.07.16', ' TE19.79', ' DR1016.73', ' FE40.24', ' WS27.31', ' WD24.74', ' WC14.79', ' WV266.82', ' \x1f']
+        xtime, xdate, xte, xpr, xhu, xwmo, xwso, xwc, xwdo = map(self.clean, self.data[:9])
 
+        xws = int(float(xwso) / WIND_SCALING_FACTOR)
+        xwm = int(float(xwmo) / WIND_SCALING_FACTOR)
+        xwd = int(float(xwdo) - WIND_OFFSET) % 360
 
-while(1)
-{
-# waiting for new client connection.
-    $client_socket = $socket->accept();
-print "SERVER Waiting for client connection on port 7977";
+        print "Time of reading: %s %s" % (xtime, xdate)
+        print "  Temperatur:    %s" % xte
+        print "  Luftdruck:     %s" % xpr
+        print "  Feuchte:       %s" % xhu
+        print "  Windspeed org: %s" % xwso
+        print "  Windspeed cal: %s" % xws
+        print "  Windmax org:   %s" % xwmo
+        print "  Windmax cal:   %s" % xwm
+        print "  WRichtung org: %s" % xwdo
+        print "  WRichtung cal: %s" % xwd
+        print "  Windchill:     %s" % xwc
+        print "  DataArray:     %s" % [xtime, xdate, xte, xpr, xhu, xwmo, xwso, xwc, xwdo, xws, xwm, xwd]
 
-# get the host and port number of newly connected client.
-#    $peer_address = $client_socket->peerhost();
-#    $peer_port = $client_socket->peerport();
+        # Timm says by still wind the wind direction provided is negative
+        if float(xwso) == 0 and float(xwdo) < 0:  # With 0 wind, set wind and direction to 0
+            xws = 0
+            xwd = 0
+            print "  >> NULLWIND <<"
 
-#    print "Accepted New Client Connection From : $peeraddress, $peerport\n";
-     print "Accepted New Client Connection ...\n";
+        # TODO: add logging
 
-# read operation on the newly accepted client
-#    $data = <$client_socket>;
-# we can also read from socket through recv()  in IO::Socket::INET
-$client_socket->recv($data,1024);
+        qstring = "?wd=%s&ws=%s&te=%s&pr=%s&ms=%s&hu=%s&wc=%s" % (
+                   xwd, xws, xte, xpr, xwm, xhu, xwc)
+        qstring_time = qstring + "&xtsd=%s&xtst=%s" % (xdate, xtime)
 
-    print "Received from Client:\n $data\n\n";
-	$datalog = $data;
+        print "Pushing data to URLs:"
+        sys.stdout.flush()
+        for name, url, user, password in urls:
+            try:
+                request = urllib2.Request(url + qstring_time)
+                if user:
+                    base64string = base64.encodestring('%s:%s' % (user, password)).replace('\n', '')
+                    request.add_header("Authorization", "Basic %s" % base64string)
+                print  " [", name, "]:", urllib2.urlopen(request).read().strip()
 
-$data =~ s/[^0-9\.\,:-]//igs;
-print $data . "\n";
-($xtime,$xdate,$xte,$xpr,$xhu,$xwmo,$xwso,$xwc,$xwdo) = split(",",$data);
+            except urllib2.HTTPError, e:
+                print 'HTTPError = ' + str(e.code)
+            except urllib2.URLError, e:
+                print 'URLError = ' + str(e.reason)
+            except httplib.HTTPException, e:
+                print 'HTTPException'
+            except Exception:
+                import traceback
+                print 'generic exception: ' + traceback.format_exc()
 
-# Skalierung Windspeed zwei Nachkommastellen
-$wfactor = 1.35;
-$woffset = 16;
+            sys.stdout.flush()
+        print ""
 
-$xws = int(($xwso*100)/$wfactor)/100;
-$xwm = int(($xwmo*100)/$wfactor)/100;
-$xwd = ($xwdo + 360 - $woffset) % 360;
+signal.signal(signal.SIGTERM, handle_signal)
+SocketServer.TCPServer.allow_reuse_address = True
+print "\n* Loading URLs from environment"
+urls = load_urls_from_env(['BERGRECHNER', 'GSVHOME', 'LENKUNG'])
+server = SocketServer.TCPServer((HOST, PORT), ParseAndPush)
+print "* Starting socket"
+sys.stdout.flush()
+server.serve_forever()
 
-print "Zeit:          $xdate $xtime\n";
-print "Temperatur:    $xte\n";
-print "Luftdruck:     $xpr\n";
-print "Feuchte:       $xhu\n";
-print "Windspeed org: $xwso\n";
-print "Windspeed cal: $xws\n";
-print "Windmax org:   $xwmo\n";
-print "Windmax cal:   $xwm\n";
-print "WRichtung org: $xwdo\n";
-print "WRichtung cal: $xwd\n";
-print "windchill:     $xwc\n";
-
-#Windrichtung und Stärke bei Nullwind
-if ($xwso == 0 && $xwdo < 0){
-   $xws = 0;
-   $xwd = 0;
-   print ">> NULLWIND <<\n";
-}
-else{print "... kein Nullwind ...\n";}
-
-#($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime(time);
-($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = gmtime(time);
-$year = $year + 1900;
-$mon += 1;
-$mon = sprintf("%02d",$mon);
-$mday = sprintf("%02d",$mday);
-$yyyymmdd = $year.$mon.$mday;
-
-$logfile = $logpath . "/" . $yyyymmdd . "_merkur.log";
-open (LOG,">>","$logfile") || die ("Error : can't open log file");
-print LOG "UTC $hour.$min:$sec: ".$datalog . "\n";
-close(LOG);
-
-
-$content = get("http://localhost:81/wetterstation/insert3.php?wd=$xwd&ws=$xws&te=$xte&pr=$xpr&ms=$xwm&hu=$xhu&wc=$xwc&xtsd=$xdate&xtst=$xtime");
-print "\nBergrechner: $content";
-
-$content = get("http://para:geier\@www.lenkungsgruppe.de/v3/wetterstation/insert2.php?wd=$xwd&ws=$xws&te=$xte&pr=$xpr&ms=$xwm&hu=$xhu&wc=$xwc");
-print "Lenkungsgruppe: $content";
-
-$content = get("http://wetter:merkur11\@www.schwarzwaldgeier.de/_extphp/wetterstation/insert/insert2.php?wd=$xwd&ws=$xws&te=$xte&pr=$xpr&ms=$xwm&hu=$xhu&wc=$xwc&xtsd=$xdate&xtst=$xtime");
-print "GSV Homepage: $content";
-
-close($socket);
-sleep (2);
-}
-
-close($socket);
-sleep (2);
