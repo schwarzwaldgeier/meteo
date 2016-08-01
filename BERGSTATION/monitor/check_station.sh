@@ -1,5 +1,9 @@
 #!/bin/bash
-SECONDS_BEFORE_ALARM1=120
+# Load email addresses from sensitive
+set -e; source /var/www/.sensitive; set +e 
+#EMAIL_LIST
+DATA_URL=http://localhost:81/wetterstation/phone_neu.php
+SECONDS_BEFORE_ALARM1=240
 SECONDS_BEFORE_ALARM2=900     # should be bigger than alarm1
 ALARM1_FLAG=/tmp/alarm1.flag  # Flags used to run alarms only once
 ALARM1_CMD=/var/www/BERGSTATION/monitor/wlan_router_in_den_arsch_tretten.sh
@@ -19,32 +23,34 @@ function notify {
 
     # send mail
     echo "Sending mail..."
-    for user in maxi.padulo@gmail.com dl4fly@darc.de; do
-        echo -n "  $user..."
-        echo -e "$MSG" | mail -s "WetterStation: $TITLE at $(date +%X)" $user
-        echo "[DONE]"
-    done
+    # Mail return allways 0. Pipeing stderr to detect for errors
+    set -x
+    ret=$(echo -e "$MSG" | mail -s "WetterStation: $TITLE at $(date +%X)" $EMAIL_LIST 3>&2 2>&1 1>&3 | tee /dev/fd/2 |  wc -l)
+    set +x
+    echo "[Returned]: $ret"
+   
+    return $ret
 }
 
 function back_to_normal {
     echo "BACK TO NORMAL: we are back"
     notify "everything OK" "Hello,\n\nthe Weather Station seems to be working again.\nHave a nice day ;)\n\nGreetz,\nWetterRobot" 
+    return $?
 }
 
 function no_data {
-    notify "CheckError"
     echo "ALARM3 trigered"
     if [ ! -f $ALARM3_FLAG ]; then  # send only one notification
-        touch $ALARM3_FLAG 
-        notify "TimestampCheckError" "Could not get the last DB timestamp. Please see the check_station.sh script"
+        notify "TimestampCheckError" "Could not get the last DB timestamp from $DATA_URL.\nPlease see the check_station.sh script and the logs in /var/log/wetterstation"
+        [ $? -eq 0 ] && touch $ALARM3_FLAG 
     fi
 }
 
 function trigger_alarm1 {
     echo "ALARM1 trigered"
     if [ ! -f $ALARM1_FLAG ]; then  # send only one notification
-        touch $ALARM1_FLAG 
-        notify "Alert1" "Hello,\n\nthe Weather Station reached ALERT_LEVEL=1.\nInitiating autorecovery procedure (kicking the router), wish me luck :)\n\nI should report myself later again. Keep an eye on it.\n\nGreetz,\nWetterRobot" 
+        notify "Alert1" "Hello,\n\nthe Weather Station reached ALERT_LEVEL=1.\nI will start the recovery script, hope that helps.\n\nI should report myself later again. Keep an eye on it.\n\nGreetz,\nWetterRobot" 
+        [ $? -eq 0 ] && touch $ALARM1_FLAG 
     fi
     $ALARM1_CMD
 }
@@ -53,15 +59,15 @@ function trigger_alarm2 {
     echo "ALARM2 trigered"
     if [ ! -f $ALARM2_FLAG ]; then 
         touch $ALARM2_FLAG 
-        notify "Alarm2" "No data after $SECONDS_BEFORE_ALARM2. Do something!"
-        notify "Alert2" "Hello,\n\nI'm sorry. After $SECONDS_BEFORE_ALARM2 there still no data.\nPlease do something, like checking the following logs:\n* /var/log/wetterstation/check_station.log\n* /var/log/wetterstation/wetterstation_daemon.log\n\nGreetz,\nWetterRobot" 
+        notify "Alert2" "Hello,\n\nI'm sorry. After $SECONDS_BEFORE_ALARM2 seconds there still no data. Radio will be turned off, telefone will say report the problem.\nPlease do something, like checking the following logs:\n* /var/log/wetterstation/check_station.log\n* /var/log/wetterstation/wetterstation_daemon.log\n\nGreetz,\nWetterRobot" 
+        [ $? -eq 0 ] && touch $ALARM2_FLAG 
     fi
     $ALARM2_CMD
 }
 
 echo "Getting last entry from database..."
 # weird URL I know...
-DB_LAST=$(curl -s http://localhost:81/wetterstation/phone_neu.php)
+DB_LAST=$(curl -s $DATA_URL)
 [ "$?" -ne 0 ] && { echo "Unable to get data..."; no_data ; exit 10; }
 
 
@@ -94,7 +100,4 @@ echo "Timestamp ALARM2: $(stat -c %y $FA2)"
 [ $FCT -nt $FA2 ] && { trigger_alarm2; exit 2; }
 [ $FCT -nt $FA1 ] && { trigger_alarm1; exit 1; }
 
-# TODO: notify everything back to normal?
-[ -f $ALARM1_FLAG ] && back_to_normal && rm -v $ALARM1_FLAG
-[ -f $ALARM2_FLAG ] && back_to_normal && rm -v $ALARM2_FLAG
-[ -f $ALARM3_FLAG ] && back_to_normal && rm -v $ALARM3_FLAG
+[ -f $ALARM1_FLAG ] || [ -f $ALARM2_FLAG ] || [ -f $ALARM3_FLAG ] && back_to_normal && rm -v $ALARM3_FLAG && rm -v && rm -v $ALARM2_FLAG && rm -v $ALARM1_FLAG
