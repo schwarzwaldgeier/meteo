@@ -1,24 +1,17 @@
 #!/usr/bin/perl
-
 use LWP::Simple;
+use Getopt::Long;
 
-($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime(time); $mon++;
-$year += 1900;
-if ($hour eq "24")      { $hour = "0"; }
-if ($min eq "1")       {  $min = "999"; }
-if ($min eq "0")       {  $min = "999"; }
-$zday = $mday;
-if (length($zday) < 2) { $zday = "0$zday"; }
-$zmon = $mon;
-if (length($zmon) < 2) { $zmon = "0$zmon"; }
-
+$RADIO_START_HOUR=0;  # When should start/stop radio playback. Default: disabled
+$RADIO_STOP_HOUR=0;
+$OUT_OF_ORDER_TIMEOUT = 900;  # If database data older than this, set out of order
 
 $phone_soundfiles_dir = "/var/www/BERGSTATION/soundfiles/phone";
 $radio_soundfiles_dir = "/var/www/BERGSTATION/soundfiles/funk";
-$phone_output_file  = "/var/www/BERGSTATION/PHONE.wav";
-$radio_output_file  = "/var/www/BERGSTATION/FUNK.wav";
+$output_directory  = "/var/www/BERGSTATION/";
 $phone_message_dir = "/var/spool/voice/messages";
 
+################################################################################
 # These wave files include no sound at various lengths.
 $soundfile_pause0   = "/p0.mus.wav";
 $soundfile_pause2   = "/p0.mus.wav";
@@ -176,33 +169,35 @@ $soundfile_deviceFrozen = "/eis2.wav";
 @args_phone = ("/usr/bin/shnjoin");
 @args_radio = ("/usr/bin/shnjoin");
 
-push @args_phone,"-Oalways";
+push @args_phone,"-Oalways";  # Overwrite always
 push @args_radio,"-Oalways";
-push @args_phone,"-aPHONE";
+push @args_phone,"-aPHONE";  # Output file name
 push @args_radio,"-aFUNK";
-push @args_phone,"-d/var/www/BERGSTATION/";
-push @args_radio,"-d/var/www/BERGSTATION/";
-push @args_phone,"-rnone";
+push @args_phone,"-d$output_directory";
+push @args_radio,"-d$output_directory";
+push @args_phone,"-rnone";  # don't reorder input files
 push @args_radio,"-rnone";
-push @args_phone,"-q";
+push @args_phone,"-q";  # supress non critical output
 push @args_radio,"-q";
 
+################################################################################
+
+# Parsing arguments
+GetOptions ("funk_an=i" => \$RADIO_START_HOUR, 
+            "funk_aus=i"   => \$RADIO_STOP_HOUR,
+            "ooo_timeout=i"   => \$OUT_OF_ORDER_TIMEOUT)
+or die("Error in command line arguments\n");
+die("ERROR: radio_stop_hour: $RADIO_STOP_HOUR can't be smaller than radio_start_hour: $RADIO_START_HOUR") if $RADIO_STOP_HOUR < $RADIO_START_HOUR;
+
 ### Collect and parse data
+# $content = '12,354,1458308820x6,31x7,15x15,354'; # Test sample
 $content = get("http://localhost:81/wetterstation/phone_neu.php");
-#$content = '12,354,1458308820x6,31x7,15x15,354'; # Test sample
 
 ($akt,$twenty,$hourly,$maxi) = split("x",$content);
-
-($a1,$a2,$a3) = split(",",$akt);
-#print time;
-#print "\n";
-#print $a3;
-#print "\n";
-#print time - $a3;
-#print "\n";
+($a1,$a2,$last_timestamp) = split(",",$akt);
 
 ### Check age of last data and announce out of order after 15 minutes
-if ((time - $a3) > 900) {
+if ((time - $last_timestamp) > $OUT_OF_ORDER_TIMEOUT) {
     # This audio says 'tschüs' so no need to add a goodbye afterwards
     AddToSoundfile($soundfile_outOfOrder, "phone", 3);  
 
@@ -281,6 +276,7 @@ if ((time - $a3) > 900) {
     AddToSoundfile($soundfile_bye, "both", 0);
 }
 
+#TODO: clean this
 print "\n* Creating phone file with:\n".join(" ", @args_phone)."\n";
 system(@args_phone) == 0;
 #    or die "system @args failed: $?";
@@ -316,14 +312,19 @@ printf "child exited with value %d\n", $? >> 8;
  #   or die "system @args failed: $?";
 
 print "\n* Creating phone message ?not_sure_here?\n";
-system("wavtopvf $phone_output_file | pvfspeed -s 7200 | pvftormd Elsa 4 > $phone_message_dir/indikativ.rmd");
+system("wavtopvf $output_directory/PHONE.wav | pvfspeed -s 7200 | pvftormd Elsa 4 > $phone_message_dir/indikativ.rmd");
 
-if ((time - $a3) < 900) {
-print "\n* Play radio file. This takes a while... (audio file can be long)\n";
-system('/usr/bin/play -q /var/www/BERGSTATION/FUNK.wav');  # -q: quiet, no output
+print "\n* INFO: Radio enabled only between $RADIO_START_HOUR:00-$RADIO_STOP_HOUR:00 hours\n";
+my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime(time);
+if ((time - $last_timestamp) > $OUT_OF_ORDER_TIMEOUT) {
+    print "\n* ERROR: OUT_OF_ORDER_TIMEOUT: Audio playback for (RADIO) skiped\n";
+}
+elsif (($hour < $RADIO_START_HOUR) || ($hour >= $RADIO_STOP_HOUR)) {
+    print "\n* WARNING: Playback skiped\n";
 }
 else {
-print "\n* Audio playback for (RADIO) skiped\n";
+    print "\n* Play radio file. This takes a while... (audio file can be long)\n";
+    system("/usr/bin/play -q $output_directory/FUNK.wav");  # -q: quiet, no output
 }
 
 sub wdirection() {
