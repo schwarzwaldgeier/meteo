@@ -25,7 +25,7 @@ function notify {
     echo "Sending mail..."
     # Mail return allways 0. Pipeing stderr to detect for errors
     set -x
-    ret=$(echo -e "$MSG" | mail -s "WetterStation: $TITLE at $(date +%X)" $EMAIL_LIST 3>&2 2>&1 1>&3 | tee /dev/fd/2 |  wc -l)
+    ret=$(echo -e "$MSG" | mail -s "WetterStation: $TITLE at $(date +%X)" $EMAIL_LIST 3>&2 2>&1 1>&3 | tee -a /dev/fd/2 |  wc -l)
     set +x
     echo "[Returned]: $ret"
    
