@@ -1,7 +1,8 @@
 #!/bin/bash
+#EMAIL_LIST
 # Load email addresses from sensitive
 set -e; source /var/www/.sensitive; set +e 
-#EMAIL_LIST
+# weird URL I know...
 DATA_URL=http://localhost:81/wetterstation/phone_neu.php
 SECONDS_BEFORE_ALARM1=300
 SECONDS_BEFORE_ALARM2=900     # should be bigger than alarm1
@@ -24,9 +25,7 @@ function notify {
     # send mail
     echo "Sending mail..."
     # Mail return allways 0. Pipeing stderr to detect for errors
-    set -x
     ret=$(echo -e "$MSG" | mail -s "WetterStation: $TITLE at $(date +%X)" $EMAIL_LIST 3>&2 2>&1 1>&3 | tee -a /dev/fd/2 |  wc -l)
-    set +x
     echo "[Returned]: $ret"
    
     return $ret
@@ -65,9 +64,8 @@ function trigger_alarm2 {
     $ALARM2_CMD
 }
 
-echo "Getting last entry from database..."
-# weird URL I know...
-DB_LAST=$(curl -s $DATA_URL)
+echo "Getting last entry from database ($DATA_URL)..."
+DB_LAST=$(curl -s --max-time 30 $DATA_URL)
 [ "$?" -ne 0 ] && { echo "Unable to get data..."; no_data ; exit 10; }
 
 
@@ -100,5 +98,4 @@ echo "Timestamp ALARM2: $(stat -c %y $FA2)"
 [ $FCT -nt $FA2 ] && { trigger_alarm2; exit 2; }
 [ $FCT -nt $FA1 ] && { trigger_alarm1; exit 1; }
 
-set -x
 [ -f $ALARM1_FLAG ] || [ -f $ALARM2_FLAG ] || [ -f $ALARM3_FLAG ] && back_to_normal && rm -vf $ALARM3_FLAG && rm -fv $ALARM2_FLAG && rm -fv $ALARM1_FLAG
