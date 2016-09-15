@@ -40,7 +40,8 @@ class ParseAndPush(SocketServer.BaseRequestHandler):
 
     def handle(self):
         # self.request is the TCP socket connected to the client
-        self.data = self.request.recv(1024).strip().split(',')
+        self.raw_data = self.request.recv(1024)
+        self.data = self.raw_data.strip().split(',')
         # Example output:
         # 18:27:00, 28.07.16, TE18.44, DR1017.07, FE50.61, WS47.29, WD37.96, WC11.10, WV298.45, 
         # 18:28:00, 28.07.16, TE18.13, DR1017.25, FE51.96, WS47.29, WD36.40, WC11.15, WV302.69, 
@@ -54,6 +55,7 @@ class ParseAndPush(SocketServer.BaseRequestHandler):
         xwm = int(float(xwmo) / WIND_SCALING_FACTOR)
         xwd = int(float(xwdo) - WIND_OFFSET) % 360
 
+        print "  RAW_DATA: %s" % self.raw_data
         print "Time of reading: %s %s" % (xtime, xdate)
         print "  Temperatur:    %s" % xte
         print "  Luftdruck:     %s" % xpr
@@ -75,8 +77,8 @@ class ParseAndPush(SocketServer.BaseRequestHandler):
 
         # TODO: add logging
 
-        qstring = "?wd=%s&ws=%s&te=%s&pr=%s&ms=%s&hu=%s&wc=%s" % (
-                   xwd, xws, xte, xpr, xwm, xhu, xwc)
+        qstring = "?wd=%s&owd=%s&ws=%s&ows=%s&te=%s&pr=%s&ms=%s&hu=%s&wc=%s" % (
+                   xwd, xwdo, xws, xwso, xte, xpr, xwm, xhu, xwc)
         qstring_time = qstring + "&xtsd=%s&xtst=%s" % (xdate, xtime)
 
         print "Pushing data to URLs:"
