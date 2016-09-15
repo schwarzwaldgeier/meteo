@@ -3,7 +3,7 @@ ini_set('display_errors', 1);
 @require_once($_SERVER["DOCUMENT_ROOT"]."/inc/php_mysql.php");
 $sql = "SELECT uid, tstamp, temperature, original_wind_speed, original_wind_maxspeed, wind_direction, pressure FROM weather_merkur2 ORDER BY tstamp DESC LIMIT 1440"; //1440 = 24h
 $result = mysql_query($sql);
-$
+
 echo "Date\tTime\tAirTemp\tWindspeed\tGusts\tWindDir\tBarometer\r\n";
 
 while ($row = mysql_fetch_assoc($result)) {
