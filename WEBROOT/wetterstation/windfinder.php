@@ -18,12 +18,12 @@ echo "Date\tTime\tAirTemp\tWindspeed\tGusts\tWindDir\tBarometer\tHumidity\r\n";
 
 while ($row = mysql_fetch_assoc($result)) {
     echo $row["tstamp"]."\t";
-    echo $row["temperature"];."\t";
-    echo $row["wind_speed"];."\t";
-	echo $row["wind_maxspeed"];."\t";
-	echo $row["wind_direction"];."\t";
-	echo $row["pressure"];."\t";
-	echo $row["humidity"];."\r\n";
+    echo $row["temperature"]."\t";
+    echo $row["wind_speed"]."\t";
+	echo $row["wind_maxspeed"]."\t";
+	echo $row["wind_direction"]."\t";
+	echo $row["pressure"]."\t";
+	echo $row["humidity"]."\r\n";
 	
 	
 }
