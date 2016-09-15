@@ -11,8 +11,8 @@ import urllib2
 HOST, PORT = "192.168.1.13", 7977
 
 # Factors calculated by Timm
-WIND_SCALING_FACTOR=1.35  # To compensate the conical effect of Merkur
-WIND_OFFSET=16            # Deviation of nord, montage can't be perfect
+WIND_SCALING_FACTOR=1.35  # To compensate the conical effect of Merkur.
+WIND_OFFSET=16            # Deviation of nord, montage can't be perfect.
 
 def handle_signal(signal, frame):
         print('! Recieved signal to stop (%s). Quitting...' % signal)
