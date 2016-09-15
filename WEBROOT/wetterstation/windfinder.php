@@ -1,5 +1,5 @@
 <?php
-
+ini_set('display_errors', 1);
 @require_once($_SERVER["DOCUMENT_ROOT"]."/inc/php_mysql.php");
 $sql = "SELECT uid, tstamp, temperature, wind_speed, wind_maxspeed, wind_direction, pressure, humidity FROM weather_merkur2 ORDER BY tstamp DESC LIMIT 100";
 $result = mysql_query($sql);
