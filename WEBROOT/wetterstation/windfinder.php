@@ -6,11 +6,14 @@ $result = mysql_query($sql);
 echo "Date\tTime\tAirTemp\tWindspeed\tGusts\tWindDir\tBarometer\tHumidity\r\n";
 
 while ($row = mysql_fetch_assoc($result)) {
+	
+	$windspeed_knots = floatval($row["wind_speed"])*0.539957;
+	$gust_knots = floatval($row["wind_maxspeed"])*0.539957;
+	
     echo date("d.m.Y",$row["tstamp"])."\t"; 
 	echo date("H:i",$row["tstamp"])."\t";
-    echo $row["temperature"]."\t";
-    echo string(floatval(($row["wind_speed"])*0.539957))."\t"; 		//kph 
-	echo string(floatval(($row["wind_maxspeed"])*0.539957))."\t";	//to knots
+    echo $windspeed_knots."\t";
+	echo $gust_knots."\t";
 	echo $row["wind_direction"]."\t";
 	echo $row["pressure"]."\t";
 	echo $row["humidity"]."\r\n";
@@ -19,7 +22,3 @@ while ($row = mysql_fetch_assoc($result)) {
 
 
 ?>
-
-
-
-
