@@ -77,8 +77,8 @@ class ParseAndPush(SocketServer.BaseRequestHandler):
 
         # TODO: add logging
 
-        qstring = "?wd=%s&owd=%s&ws=%s&ows=%s&te=%s&pr=%s&ms=%s&hu=%s&wc=%s" % (
-                   xwd, xwdo, xws, xwso, xte, xpr, xwm, xhu, xwc)
+        qstring = "?wd=%s&owd=%s&ws=%s&ows=%s&te=%s&pr=%s&ms=%s&oms=%s&hu=%s&wc=%s" % (
+                   xwd, xwdo, xws, xwso, xte, xpr, xwm, xwmo, xhu, xwc)
         qstring_time = qstring + "&xtsd=%s&xtst=%s" % (xdate, xtime)
 
         print "Pushing data to URLs:"
