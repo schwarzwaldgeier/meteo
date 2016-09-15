@@ -9,8 +9,8 @@ while ($row = mysql_fetch_assoc($result)) {
     echo date("d.m.Y",$row["tstamp"])."\t"; 
 	echo date("H:i",$row["tstamp"])."\t";
     echo $row["temperature"]."\t";
-    echo string(floatval(($row["wind_speed"])*0.539957)."\t"; 		//kph 
-	echo string(floatval(($row["wind_maxspeed"])*0.539957)."\t";	//to knots
+    echo string(floatval(($row["wind_speed"])*0.539957))."\t"; 		//kph 
+	echo string(floatval(($row["wind_maxspeed"])*0.539957))."\t";	//to knots
 	echo $row["wind_direction"]."\t";
 	echo $row["pressure"]."\t";
 	echo $row["humidity"]."\r\n";
