@@ -8,8 +8,8 @@ echo "Date\tTime\tAirTemp\tWindspeed\tGusts\tWindDir\tBarometer\r\n";
 
 while ($row = mysql_fetch_assoc($result)) {
 	
-	$windspeed_knots = floatval($row["original_wind_speed"])*0.539957;
-	$gust_knots = floatval($row["original_wind_maxspeed"])*0.539957;
+	$windspeed_knots = round(floatval($row["original_wind_speed"])*0.539957);
+	$gust_knots = round(floatval($row["original_wind_maxspeed"])*0.539957);
 	
     echo date("d.m.Y",$row["tstamp"])."\t"; 
 	echo date("H:i",$row["tstamp"])."\t";
