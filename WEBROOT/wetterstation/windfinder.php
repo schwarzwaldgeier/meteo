@@ -12,6 +12,7 @@ while ($row = mysql_fetch_assoc($result)) {
 	
     echo date("d.m.Y",$row["tstamp"])."\t"; 
 	echo date("H:i",$row["tstamp"])."\t";
+	echo $row["temperature"]."\t";
     echo $windspeed_knots."\t";
 	echo $gust_knots."\t";
 	echo $row["wind_direction"]."\t";
