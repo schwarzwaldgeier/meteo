@@ -12,8 +12,7 @@ PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 25 6	* * *	root	test -x /usr/sbin/anacron || ( cd / && run-parts --report /etc/cron.daily )
 47 6	* * 7	root	test -x /usr/sbin/anacron || ( cd / && run-parts --report /etc/cron.weekly )
 52 6	1 * *	root	test -x /usr/sbin/anacron || ( cd / && run-parts --report /etc/cron.monthly )
-#* *	* * *	    root	chmod 755 /bin/chmod 755 /var/log/mgetty/vg_ttyS0.log
-#Deactivated the previous statement because it runs wild and I don't know what it does. --seb, 19.09.2016
+* *	* * *	    root	chmod 755 /bin/chmod 755 /var/log/mgetty/vg_ttyS0.log
 
 # Prepares sound files for telephone and radio 
 #   funk_an: hour since the radio playback is active
