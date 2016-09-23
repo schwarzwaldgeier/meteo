@@ -1,5 +1,7 @@
 <?php
+
     @require_once($_SERVER["DOCUMENT_ROOT"]."/inc/parse_request.inc.php");
+
 	@require_once($_SERVER["DOCUMENT_ROOT"]."/sensitive.php");
 
 	$sensitive = ParseSensitive("../../.sensitive");
@@ -38,7 +40,7 @@
 		
 
 		$username = $sensitive['SENSITIVE_OPENWEATHERMAP_USERNAME'];
-		$password = $sensitive['SENSITIVE_OPENWEATHERMAP_PASSWORD'];
+		$password = $sensitive['SENSITIVE OPENWEATHERMAP_PW'];
 		
 		$postdata = array(
 			"wind_dir" => 	($_GET["wd"]),
@@ -80,9 +82,6 @@
 		print $response;
 		
 
-		$context  = stream_context_create($options);
-		$result = file_get_contents($url, false, $context);
-		var_dump($result);
 		
 		
 	} else {

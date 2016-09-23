@@ -23,7 +23,7 @@ outputs an associative array named $sensitive like
 */
 
 function ParseSensitive($file) {
-	$sensitivedebug=true;
+	$sensitivedebug=false;
 	$sensitive;
 	$index = array();
 
