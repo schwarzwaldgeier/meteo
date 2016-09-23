@@ -2,7 +2,7 @@
     @require_once($_SERVER["DOCUMENT_ROOT"]."/inc/parse_request.inc.php");
 	@require_once($_SERVER["DOCUMENT_ROOT"]."/sensitive.php");
 
-	$sensitive = ParseSensitive("../.sensitive");
+	$sensitive = ParseSensitive("../../.sensitive");
     parse_request($_GET);
 
 	$error = "";
