@@ -2,17 +2,17 @@
     @require_once($_SERVER["DOCUMENT_ROOT"]."/inc/parse_request.inc.php");
 	@require_once($_SERVER["DOCUMENT_ROOT"]."/sensitive.php");
 
-	$sensitive = ParseSensitive("../sensitive");
+	$sensitive = ParseSensitive("../.sensitive");
     parse_request($_GET);
 
 	$error = "";
-	if(strlen($_GET["ws"])<1) { $error .= "no windspeed. "; $error = 1; }
-	if(strlen($_GET["ows"])<1) { $error .= "no original windspeed. "; $error = 1; }
-	if(strlen($_GET["wd"])<1) { $error .= "no winddirection. "; $error = 1; }
-	if(strlen($_GET["owd"])<1) { $error .= "no original wind direction. "; $error = 1; }
-	if(strlen($_GET["te"])<1) { $error .= "no temperature. "; $error = 1; }
-	if(strlen($_GET["pr"])<1) { $error .= "no pressure. "; $error = 1; }
-	if(strlen($_GET["ms"])<1) { $error .= "no max windspeed. "; $error = 1; }
+	if(strlen($_GET["ws"])<1) { 	$error .= "no windspeed. "; $error = 1; }
+	if(strlen($_GET["ows"])<1) { 	$error .= "no original windspeed. "; $error = 1; }
+	if(strlen($_GET["wd"])<1) { 	$error .= "no winddirection. "; $error = 1; }
+	if(strlen($_GET["owd"])<1) { 	$error .= "no original wind direction. "; $error = 1; }
+	if(strlen($_GET["te"])<1) { 	$error .= "no temperature. "; $error = 1; }
+	if(strlen($_GET["pr"])<1) { 	$error .= "no pressure. "; $error = 1; }
+	if(strlen($_GET["ms"])<1) { 	$error .= "no max windspeed. "; $error = 1; }
 	if(strlen($_GET["oms"])<1) { $error .= "no original max windspeed. "; $error = 1; }
 	if(strlen($_GET["wc"])<1) { $error .= "no windchill. "; $error = 1; }
 	if(strlen($_GET["hu"])<1) { $error .= "no humidity. "; $error = 1; }
