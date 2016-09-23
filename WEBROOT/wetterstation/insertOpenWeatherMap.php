@@ -92,7 +92,7 @@ error_reporting(E_ALL);
 
 	}
 	if(empty($error)) {
-		echo "Das hat funktioniert.";
+		echo " OK.";
 	} else {
 		echo "ERROR: $error";
 	}
