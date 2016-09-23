@@ -22,13 +22,13 @@ outputs an associative array named $sensitive like
 
 */
 
-function ParseSensitive($file) {
+function ParseSensitive($path) {
 	$sensitivedebug=false;
 	$sensitive;
 	$index = array();
 
 
-	$file = file_get_contents('.sensitive', true);
+	$file = file_get_contents($path, true);
 	$file = preg_replace("/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "\n", $file); //remove blank lines, http://stackoverflow.com/a/709684
 	$sensitive = explode("\n", $file);
 
