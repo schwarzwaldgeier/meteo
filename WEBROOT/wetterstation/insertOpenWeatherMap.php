@@ -92,7 +92,7 @@ error_reporting(E_ALL);
 
 	}
 	if(empty($error)) {
-		echo "Das hat funktioniert";
+		echo "Das hat funktioniert. Temp: ".sprintf($_GET["te"]);
 	} else {
 		echo "ERROR: $error";
 	}
