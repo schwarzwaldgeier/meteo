@@ -23,6 +23,8 @@
       $inputDate = $_GET['xtsd'] ;
       $inputTime = $_GET['xtst'];  
 
+	  
+	  
       /*
       $newDate = date("Y-m-d", strtotime(str_replace('.', '-', $inputDate)) );
       */      
@@ -84,7 +86,8 @@
 		
 		
 	} else {
-		print "ERROR: $error";
+		print "ERROR: $error $response";
+
 	}
 	if(empty($error)) {
 		echo "Das hat funktioniert";
