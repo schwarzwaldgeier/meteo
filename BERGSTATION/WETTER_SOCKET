@@ -107,7 +107,7 @@ class ParseAndPush(SocketServer.BaseRequestHandler):
 signal.signal(signal.SIGTERM, handle_signal)
 SocketServer.TCPServer.allow_reuse_address = True
 print "\n* Loading URLs from environment"
-urls = load_urls_from_env(['BERGRECHNER', 'GSVHOME', 'LENKUNG'])
+urls = load_urls_from_env(['BERGRECHNER', 'GSVHOME', 'LENKUNG', 'OPENWEATHERMAP'])
 server = SocketServer.TCPServer((HOST, PORT), ParseAndPush)
 print "* Starting socket"
 sys.stdout.flush()
