@@ -41,9 +41,9 @@
 		$password = $sensitive['SENSITIVE_OPENWEATHERMAP_PASSWORD'];
 		
 		$postdata = array(
-			"wind_dir" => 	$_GET["wd"],
-			"wind_speed" => $_GET["ows"],
-			"wind_gust" => 	$_GET["oms"],
+			"wind_dir" => 	($_GET["wd"]),
+			"wind_speed" => sprintf(floatval($_GET["ows"]) * 0.27777777777778), //kph to m/s
+			"wind_gust" => 	sprintf(floatval($_GET["oms"]) * 0.27777777777778),
 			"temp" => 		$_GET["te"],
 			"humidity" => 	$_GET["hu"],
 			"pressure" =>	$_GET["pr"],
@@ -86,7 +86,7 @@
 		
 		
 	} else {
-		print "ERROR: $error $response";
+		print " OWM ERROR: $error $response";
 
 	}
 	if(empty($error)) {
