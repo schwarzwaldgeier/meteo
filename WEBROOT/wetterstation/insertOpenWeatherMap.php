@@ -92,7 +92,8 @@ error_reporting(E_ALL);
 
 	}
 	if(empty($error)) {
-		echo "Das hat funktioniert. Temp: ".sprintf($_GET["te"]);
+		echo "Das hat funktioniert.";
+		print_r($postdata);
 	} else {
 		echo "ERROR: $error";
 	}
