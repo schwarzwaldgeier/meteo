@@ -105,7 +105,9 @@ def send_email(sender, to, subject, body, smtpserver, smtpuser, smtppassword, sm
         s.sendmail(sender, to, msg.as_string())	
         s.quit    
         return True
-			
+
+
+print("Running script on %" % datetime.now())
 sensitive = read_sensitive("/var/www/.sensitive")
 owm_api_key = sensitive['SENSITIVE_OPENWEATHERMAP_APIKEY']
 owm_api_lon = "8.2806"
@@ -129,4 +131,5 @@ if len(good_times) > 0:
 	print ("Sending email ...")
 	announce_briefing_day(good_times)
 else:
-	print ("No days, no email.")
+	print ("No good days, no email.")
+print "---"
