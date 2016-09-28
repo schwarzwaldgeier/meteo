@@ -132,4 +132,4 @@ if len(good_times) > 0:
 	announce_briefing_day(good_times)
 else:
 	print ("No good days, no email.")
-print "---"
+print ("---")
