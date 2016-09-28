@@ -81,11 +81,11 @@ def announce_briefing_day(forecast):
 
 	formatted_forecasts = ""
 	German_weekdays = ['Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag', 'Sonntag'] #yes i know there is something built in for this but it looked complicated and I didn't care
-	for forecast in forecast:
-		godddate = date.fromtimestamp(forecast['dt'])
-		windspeed = str(int(round(forecast['wind']['speed'] * 3.6)))
-		winddirection = str(int(round(forecast['wind']['deg'])))
-		clouds = str(int(round(float(forecast['clouds']['all']) / 12.5))) #convert to 1/8s
+	for f in forecast:
+		godddate = date.fromtimestamp(f['dt'])
+		windspeed = str(int(round(f['wind']['speed'] * 3.6)))
+		winddirection = str(int(round(f['wind']['deg'])))
+		clouds = str(int(round(float(f['clouds']['all']) / 12.5))) #convert to 1/8s
 		formatted_forecasts = formatted_forecasts + German_weekdays[date.weekday()] + ", " + str(godddate.day) + '.' + str(godddate.month) + '.' + str(godddate.year) + ' ' + str(godddate.hour) + ':' + str(godddate.minute) + ' Uhr: ' + windspeed + ' km/h aus ' + winddirection + '° NO, ' + clouds + '/8 Bewölkung, kein Regen.\n'
 			
 	emailbody = open('/var/www/no-email.txt').read()
