@@ -107,7 +107,7 @@ def send_email(sender, to, subject, body, smtpserver, smtpuser, smtppassword, sm
         return True
 
 
-print("Running script on %" % datetime.now())
+print("Running script on %s" % datetime.now())
 sensitive = read_sensitive("/var/www/.sensitive")
 owm_api_key = sensitive['SENSITIVE_OPENWEATHERMAP_APIKEY']
 owm_api_lon = "8.2806"
