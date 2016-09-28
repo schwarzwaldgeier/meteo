@@ -12,7 +12,7 @@ PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 25 6	* * *	root	test -x /usr/sbin/anacron || ( cd / && run-parts --report /etc/cron.daily )
 47 6	* * 7	root	test -x /usr/sbin/anacron || ( cd / && run-parts --report /etc/cron.weekly )
 52 6	1 * *	root	test -x /usr/sbin/anacron || ( cd / && run-parts --report /etc/cron.monthly )
-* *	* * *	    root	chmod 755 /bin/chmod 755 /var/log/mgetty/vg_ttyS0.log
+#* *	* * *	    root	chmod 755 /bin/chmod 755 /var/log/mgetty/vg_ttyS0.log
 
 # Prepares sound files for telephone and radio 
 #   funk_an: hour since the radio playback is active
@@ -25,4 +25,4 @@ PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 */2 * * * *     root    /var/www/BERGSTATION/monitor/check_station.sh >>/var/log/wetterstation/check_station.log 2>&1
 
 #Nordost Briefings every wednesday noon
-* 12 * * 3 /usr/bin/python /var/www/nordost/no.py > /var/log/nordost.log
+* 12 * * 3      root    /usr/bin/python /var/www/nordost/no.py >> /var/log/nordost.log
