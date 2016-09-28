@@ -23,3 +23,6 @@ PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 # Monitor the state of the weather station. If no new data it alarms and
 # initiates corrective actions
 */2 * * * *     root    /var/www/BERGSTATION/monitor/check_station.sh >>/var/log/wetterstation/check_station.log 2>&1
+
+#Nordost Briefings every wednesday noon
+* 12 * * 3 /usr/bin/python /var/www/nordost/no.py > /var/log/nordost.log
