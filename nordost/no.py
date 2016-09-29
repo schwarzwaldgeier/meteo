@@ -86,7 +86,7 @@ def announce_briefing_day(forecast):
 		windspeed = str(int(round(f['wind']['speed'] * 3.6)))
 		winddirection = str(int(round(f['wind']['deg'])))
 		clouds = str(int(round(float(f['clouds']['all']) / 12.5))) #convert to 1/8s
-		formatted_forecasts = formatted_forecasts + German_weekdays[date.weekday()] + ", " + str(godddate.day) + '.' + str(godddate.month) + '.' + str(godddate.year) + ' ' + str(godddate.hour) + ':' + str(godddate.minute) + ' Uhr: ' + windspeed + ' km/h aus ' + winddirection + '° NO, ' + clouds + '/8 Bewölkung, kein Regen.\n'
+		formatted_forecasts = formatted_forecasts + German_weekdays[date.weekday()] + ", " + str(godddate.day) + '.' + str(godddate.month) + '.' + str(godddate.year) + ' ' + str(godddate.hour) + ':' + str(godddate.minute).rjust(2, '0') + ' Uhr: ' + windspeed + ' km/h aus ' + winddirection + '° NO, ' + clouds + '/8 Bewölkung, kein Regen.\n'
 			
 	emailbody = open('/var/www/no-email.txt').read()
 	emailbody = emailbody.replace('{forecasts}', formatted_forecasts)
