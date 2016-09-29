@@ -2,25 +2,25 @@ Lieber Schwarzwaldgeier!
 
 Dies ist eine automatische E-Mail, die auf passendes Wetter und Interesse an einer Nordost-Einweisung am kommenden Wochenende hinweist, weil folgendes zusammenkommt:
 
-* Du bist auf Nordost einweisungsberechtigt
-* Es gibt zehn oder mehr Interessenten für eine Nordost-Einweisung
-* Laut Vorhersage ist eine Nordost-Einweisung am kommenden Wochenende möglich, nämlich:
+-Du bist auf Nordost einweisungsberechtigt
+-Es gibt 15 oder mehr Interessenten für eine Nordost-Einweisung
+-Laut Vorhersage ist eine Nordost-Einweisung am kommenden Wochenende möglich, nämlich:
 
 {forecasts}
 
 Möchtest du den Interessenten eine Einweisung anbieten? Wenn ja:
 
-* Sieh bitte nach, ob das Wetter wirklich passt - der Computer kann sich irren. Insbesondere möglicherweise zu starke Thermik und im Tagesverlauf zunehmender Wind werden nicht immer berücksichtigt. http://www.schwarzwaldgeier.de/merkur-wetter-prognose/
-* Hier eine Liste der aktuellen Interessenten: {participantsurl}
-* Mit den anderen NO-Einweisern kannst du dich über den Verteiler {mailinglist} abstimmen
-* Du möchtest eine Rundmail an die Interessierten senden? --> Info an diesen Verteiler (und Mails händisch rausschicken falls weder Sebastian noch Stefan rechtzeitig verfügbar sind)
-* Du möchtest auf der Website auf die Einweisung hinweisen? --> Info an diesen Verteiler (Achtung, erhöht die Anzahl der Teilnehmer und Besserwisser beträchtlich)
-* Inhalte einer Nordost-Einweisung:
-* * Checkliste: https://www.dropbox.com/s/k954rw9hj6zykck/Einweisungscheckliste_NO.pdf?dl=0
-* * Kernpunkte: https://www.dropbox.com/s/fsd2ad5g5k39eqn/NO-Einweisungskernpunkte_20150425.pdf?dl=0
-* * Spickzettel: https://www.dropbox.com/s/e509f4h2vyillx3/cheatsheet-no-einweisung.docx?dl=0
+- Sieh bitte nach, ob das Wetter wirklich passt - der Computer kann sich irren. Insbesondere möglicherweise zu starke Thermik oder Änderungen im Tagesverlauf werden nicht immer berücksichtigt. http://www.schwarzwaldgeier.de/merkur-wetter-prognose/
+- Hier eine Liste der aktuellen Interessenten: {participantsurl}
+- Mit den anderen NO-Einweisern kannst du dich über den Verteiler {mailinglist} abstimmen
+- Du möchtest eine Rundmail an die Interessierten senden? --> Info an diesen Verteiler (und Mails händisch rausschicken falls weder Sebastian noch Stefan rechtzeitig verfügbar sind)
+- Du möchtest auf der Website auf die Einweisung hinweisen? --> Info an diesen Verteiler (Achtung, erhöht die Anzahl der Teilnehmer und Besserwisser beträchtlich)
+- Inhalte einer Nordost-Einweisung:
+-- Checkliste: https://www.dropbox.com/s/k954rw9hj6zykck/Einweisungscheckliste_NO.pdf?dl=0
+-- Kernpunkte: https://www.dropbox.com/s/fsd2ad5g5k39eqn/NO-Einweisungskernpunkte_20150425.pdf?dl=0
+-- Spickzettel: https://www.dropbox.com/s/e509f4h2vyillx3/cheatsheet-no-einweisung.docx?dl=0
 
 Nach der Einweisung bitte eine Liste der Eingewiesenen an webmaster@schwarzwaldgeier.de schicken, damit wir sie aus der Liste der Interessierten streichen können. Einfach die Einträge im Einweisungsordner abfotografieren.
 
 Vielen Dank für dein Engagement!
-Dein freundlicher NO-Einweisungsbot /usr/bin/no.py auf dem Wetterstations-Rechner.
+Dein freundlicher NO-Einweisungsbot /var/www/nordost/no.py auf dem Wetterstations-Rechner.
