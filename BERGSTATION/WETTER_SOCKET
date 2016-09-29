@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import base64
+import datetime
 import httplib
 import os
 import re
@@ -15,8 +16,11 @@ HOST, PORT = "192.168.1.13", 7977
 WIND_SCALING_FACTOR=1.35  # To compensate the conical effect of Merkur.
 WIND_OFFSET=16            # Deviation of nord, montage can't be perfect.
 
+def now_str():
+    return str(datetime.datetime.now()).split('.')[0]
+
 def handle_signal(signal, frame):
-        print('! Recieved signal to stop (%s). Quitting...' % signal)
+        print('[%s] ! Recieved signal to stop (%s). Quitting...' % (now_str(), signal))
         sys.exit(0)
 
 def load_urls_from_env(key_list):
@@ -56,8 +60,9 @@ class ParseAndPush(SocketServer.BaseRequestHandler):
         xwm = int(float(xwmo) / WIND_SCALING_FACTOR)
         xwd = int(float(xwdo) - WIND_OFFSET) % 360
 
+        print "[%s] Recieved data" % now_str()
         print "  RAW_DATA: %s" % self.raw_data
-        print "Time of reading: %s %s" % (xtime, xdate)
+        print "  Time of read: %s %s" % (xtime, xdate)
         print "  Temperatur:    %s" % xte
         print "  Luftdruck:     %s" % xpr
         print "  Feuchte:       %s" % xhu
@@ -107,10 +112,10 @@ class ParseAndPush(SocketServer.BaseRequestHandler):
 
 signal.signal(signal.SIGTERM, handle_signal)
 SocketServer.TCPServer.allow_reuse_address = True
-print "\n* Loading URLs from environment"
+print "\n[%s] Loading URLs from environment" % now_str()
 urls = load_urls_from_env(['BERGRECHNER', 'GSVHOME', 'LENKUNG', 'OPENWEATHERMAP'])
 server = SocketServer.TCPServer((HOST, PORT), ParseAndPush)
-print "* Starting socket"
+print "[%s] Starting socket" % now_str()
 sys.stdout.flush()
 server.serve_forever()
 

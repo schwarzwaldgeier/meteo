@@ -4,7 +4,7 @@
 set -e; source /var/www/.sensitive; set +e 
 # weird URL I know...
 DATA_URL=http://localhost:81/wetterstation/phone_neu.php
-SECONDS_BEFORE_ALARM1=300
+SECONDS_BEFORE_ALARM1=540
 SECONDS_BEFORE_ALARM2=900     # should be bigger than alarm1
 ALARM1_FLAG=/tmp/alarm1.flag  # Flags used to run alarms only once
 ALARM1_CMD=/var/www/BERGSTATION/monitor/wlan_router_in_den_arsch_tretten.sh
