@@ -27,4 +27,4 @@ MAILTO=""
 */2 * * * *     root    /var/www/BERGSTATION/monitor/check_station.sh >>/var/log/wetterstation/check_station.log 2>&1
 
 #Nordost Briefings every wednesday noon
-* 12 * * 3      root    /usr/bin/python /var/www/nordost/no.py >> /var/log/nordost.log
+0 12 * * 3      root    /usr/bin/python /var/www/nordost/no.py >> /var/log/nordost.log
