@@ -22,11 +22,10 @@ if len(sys.argv) > 1:
         debug = False
 else:
     debug = False
-    
+
 
 max_windspeed = 5
 wind_direction_boundaries = {'north': 17.5, 'east': 62.5}
-
 
 
 def read_sensitive(path):
@@ -100,7 +99,7 @@ def is_good_time_for_briefing(forecast):
 
 
 def announce_briefing_day(forecast):
-    listurl =  sensitive['SENSITIVE_NORTHEAST_LISTURL']
+    listurl = sensitive['SENSITIVE_NORTHEAST_LISTURL']
     sender = sensitive['SENSITIVE_NORTHEAST_BRIEFERSMAIL']
     recipient = sensitive['SENSITIVE_NORTHEAST_BRIEFERSMAIL']
     mailinglist = sensitive['SENSITIVE_NORTHEAST_BRIEFERSMAIL']
@@ -116,7 +115,7 @@ def announce_briefing_day(forecast):
         sender = sensitive['SENSITIVE_NORTHEAST_DEBUGMAIL']
         smtpuser = sensitive['SENSITIVE_NORTHEAST_DEBUGMAIL']
         smtppassword = sensitive['SENSITIVE_NORTHEAST_DEBUGMAILPASSWORD']
-    
+
     # yes i know there is something built in for this but it looked
     # complicated and I didn't care
     German_weekdays = [
