@@ -6,7 +6,8 @@
 
 SHELL=/bin/sh
 PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
-MAILTO="" # Disable email sending
+# Disable email sending
+MAILTO="" 
 
 # m h dom mon dow user	command
 17 *	* * *	root    cd / && run-parts --report /etc/cron.hourly
