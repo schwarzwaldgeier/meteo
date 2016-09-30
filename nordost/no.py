@@ -14,14 +14,14 @@ else:
 import calendar
 
 debug = False
-if len(sys.argv) > 0:
-    if sys.argv[0] == "--debug" or sys.argv[0] == "-d" :
+if len(sys.argv) > 1:
+    if sys.argv[1] == "--debug" or sys.argv[1] == "-d":
         debug = True
         print ("Debug mode")
     else:
         debug = False
 else:
-    debug = False;
+    debug = False
     
 
 max_windspeed = 5
