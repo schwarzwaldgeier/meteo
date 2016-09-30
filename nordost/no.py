@@ -13,9 +13,20 @@ else:
     from urllib import urlopen
 import calendar
 
+debug = False
+if len(sys.argv) > 0:
+    if sys.argv[0] == "--debug" or sys.argv[0] == "-d" :
+        debug = True
+        print ("Debug mode")
+    else:
+        debug = False
+else:
+    debug = False;
+    
+
 max_windspeed = 5
 wind_direction_boundaries = {'north': 17.5, 'east': 62.5}
-# wind_direction_boundaries = {'north': 0, 'east': 360} #TEST ONLY!
+
 
 
 def read_sensitive(path):
@@ -89,8 +100,23 @@ def is_good_time_for_briefing(forecast):
 
 
 def announce_briefing_day(forecast):
-
+    listurl =  sensitive['SENSITIVE_NORTHEAST_LISTURL']
+    sender = sensitive['SENSITIVE_NORTHEAST_BRIEFERSMAIL']
+    recipient = sensitive['SENSITIVE_NORTHEAST_BRIEFERSMAIL']
+    mailinglist = sensitive['SENSITIVE_NORTHEAST_BRIEFERSMAIL']
+    subject = "Nordosteinweiser für's Wochenende gesucht!"
+    smtpserver = sensitive['SENSITIVE_NORTHEAST_SMTPSERVER']
+    stmpuser = sensitive['SENSITIVE_NORTHEAST_BRIEFERSMAIL']
+    smtppassword = sensitive['SENSITIVE_NORTHEAST_SMTPPASSWORD']
+    smtpport = sensitive['SENSITIVE_NORTHEAST_SMTPPORT']
     formatted_forecasts = ""
+
+    if debug:
+        recipient = sensitive['SENSITIVE_NORTHEAST_DEBUGMAIL']
+        sender = sensitive['SENSITIVE_NORTHEAST_DEBUGMAIL']
+        smtpuser = sensitive['SENSITIVE_NORTHEAST_DEBUGMAIL']
+        smtppassword = sensitive['SENSITIVE_NORTHEAST_DEBUGMAILPASSWORD']
+    
     # yes i know there is something built in for this but it looked
     # complicated and I didn't care
     German_weekdays = [
@@ -113,13 +139,11 @@ def announce_briefing_day(forecast):
     emailbody = open('/var/www/nordost/no-email.txt').read()
     emailbody = emailbody.replace('{forecasts}', formatted_forecasts)
     emailbody = emailbody.replace(
-        '{participantsurl}',
-        sensitive['SENSITIVE_NORTHEAST_LISTURL'])
+        '{participantsurl}', listurl)
     emailbody = emailbody.replace(
-        '{mailinglist}',
-        sensitive['SENSITIVE_NORTHEAST_BRIEFERSMAIL'])
-    send_email(sensitive['SENSITIVE_NORTHEAST_BRIEFERSMAIL'], sensitive['SENSITIVE_NORTHEAST_BRIEFERSMAIL'], "Nordosteinweiser für's Wochenende gesucht!", emailbody, sensitive['SENSITIVE_NORTHEAST_SMTPSERVER'],
-               sensitive['SENSITIVE_NORTHEAST_BRIEFERSMAIL'], sensitive['SENSITIVE_NORTHEAST_SMTPPASSWORD'], sensitive['SENSITIVE_NORTHEAST_SMTPPORT'])
+        '{mailinglist}', mailinglist)
+    send_email(sender, recipient, subject, emailbody, smtpserver,
+               smtpuser, smtppassword, smtpport)
     return True
 
 
@@ -151,7 +175,7 @@ good_times = []
 
 for forecast in forecast_list:
     date = datetime.fromtimestamp(int(forecast['dt']))
-    if is_good_time_for_briefing(forecast):
+    if is_good_time_for_briefing(forecast) or debug == True:
         print ("%s Looking good!" % date)
         good_times.append(forecast)
 
