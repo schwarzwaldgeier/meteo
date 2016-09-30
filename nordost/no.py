@@ -11,6 +11,7 @@ if sys.version_info >= (3, 0):
     from urllib.request import urlopen
 else:
     from urllib import urlopen
+import calendar
 
 max_windspeed = 5
 wind_direction_boundaries = {'north': 17.5, 'east': 62.5}
@@ -82,6 +83,7 @@ def is_during_day(forecast):
 def is_good_time_for_briefing(forecast):
     if is_weekend(forecast) and is_during_day(forecast) and is_wind_direction_ok(
             forecast) and is_windspeed_ok and is_dry(forecast) and is_sunny(forecast):
+#    if True:
         return True
     else:
         return False
@@ -101,13 +103,13 @@ def announce_briefing_day(forecast):
         'Samstag',
         'Sonntag']
     for f in forecast:
-        godddate = date.fromtimestamp(f['dt'])
+        gooddate = date.fromtimestamp(f['dt'])
         windspeed = str(int(round(f['wind']['speed'] * 3.6)))
         winddirection = str(int(round(f['wind']['deg'])))
         # convert to 1/8s
         clouds = str(int(round(float(f['clouds']['all']) / 12.5)))
-        formatted_forecasts = formatted_forecasts + German_weekdays[date.weekday()] + ", " + str(godddate.day) + '.' + str(godddate.month) + '.' + str(godddate.year) + ' ' + str(
-            godddate.hour) + ':' + str(godddate.minute).rjust(2, '0') + ' Uhr:\n' + windspeed + ' km/h aus ' + winddirection + '° NO, ' + clouds + '/8 Bewölkung, kein Regen.\n\n'
+        formatted_forecasts = formatted_forecasts + German_weekdays[gooddate.weekday()] + ", " + str(gooddate.day) + '.' + str(gooddate.month) + '.' + str(gooddate.year) + ' ' + str(
+            gooddate.hour) + ':' + str(gooddate.minute).rjust(2, '0') + ' Uhr:\n' + windspeed + ' km/h aus ' + winddirection + '° NO, ' + clouds + '/8 Bewölkung, kein Regen.\n\n'
 
     emailbody = open('/var/www/nordost/no-email.txt').read()
     emailbody = emailbody.replace('{forecasts}', formatted_forecasts)
