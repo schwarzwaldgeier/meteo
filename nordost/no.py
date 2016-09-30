@@ -83,7 +83,6 @@ def is_during_day(forecast):
 def is_good_time_for_briefing(forecast):
     if is_weekend(forecast) and is_during_day(forecast) and is_wind_direction_ok(
             forecast) and is_windspeed_ok and is_dry(forecast) and is_sunny(forecast):
-#    if True:
         return True
     else:
         return False
@@ -131,7 +130,7 @@ def send_email(sender, to, subject, body, smtpserver,
     msg['From'] = sender
     msg['To'] = to
     s = smtplib.SMTP(smtpserver)
-    s.sendmail(sender, to, msg.as_string())
+    print (s.sendmail(sender, to, msg.as_string()))
     s.quit
     return True
 
