@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 # Get password and IP from a file outside repository control
-echo "[router_in_den_arsch_tretten] Started"
+echo "[$(date)] $(basename $0): Started"
 echo "INFO: Loading sensitive pasword for router access"
 set -e; source /var/www/.sensitive; set +e  
 
@@ -16,5 +16,5 @@ echo "INFO: Restarting local socket daemon..."
 /etc/init.d/wetterstation stop
 sleep 2
 /etc/init.d/wetterstation start
-echo "[router_in_den_arsch_tretten] Finished"
+echo "[$(date)] $(basename $0): Finished"
 
