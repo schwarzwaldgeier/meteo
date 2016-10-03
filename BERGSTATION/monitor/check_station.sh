@@ -4,12 +4,12 @@
 set -e; source /var/www/.sensitive; set +e 
 # weird URL I know...
 DATA_URL=http://localhost:81/wetterstation/phone_neu.php
-SECONDS_BEFORE_ALARM1=540
+SECONDS_BEFORE_ALARM1=240
 SECONDS_BEFORE_ALARM2=900     # should be bigger than alarm1
 ALARM1_FLAG=/tmp/alarm1.flag  # Flags used to run alarms only once
-ALARM1_CMD=/var/www/BERGSTATION/monitor/wlan_router_in_den_arsch_tretten.sh
+ALARM1_CMD=/var/www/BERGSTATION/monitor/attempt_recover.sh
 ALARM2_FLAG=/tmp/alarm2.flag
-ALARM1_CMD=/var/www/BERGSTATION/monitor/wlan_router_in_den_arsch_tretten.sh
+ALARM2_CMD=/var/www/BERGSTATION/monitor/attempt_recover.sh
 ALARM3_FLAG=/tmp/alarm3.flag  
 
 TF_DIR=/tmp/  # Test files for tstamp comparission (bash style sorry)
@@ -48,7 +48,7 @@ function no_data {
 function trigger_alarm1 {
     echo "ALARM1 trigered"
     if [ ! -f $ALARM1_FLAG ]; then  # send only one notification
-        notify "Alert1" "Hello,\n\nthe Weather Station reached ALERT_LEVEL=1.\nI will start the recovery script, hope that helps.\n\nI should report myself later again. Keep an eye on it.\n\nGreetz,\nWetterRobot" 
+        #notify "Alert1" "Hello,\n\nthe Weather Station reached ALERT_LEVEL=1.\nI will start the recovery script, hope that helps.\n\nI should report myself later again. Keep an eye on it.\n\nGreetz,\nWetterRobot" 
         [ $? -eq 0 ] && touch $ALARM1_FLAG 
     fi
     $ALARM1_CMD
@@ -58,7 +58,8 @@ function trigger_alarm2 {
     echo "ALARM2 trigered"
     if [ ! -f $ALARM2_FLAG ]; then 
         touch $ALARM2_FLAG 
-        notify "Alert2" "Hello,\n\nI'm sorry. After $SECONDS_BEFORE_ALARM2 seconds there still no data. Radio will be turned off, telefone will say report the problem.\nPlease do something, like checking the following logs:\n* /var/log/wetterstation/check_station.log\n* /var/log/wetterstation/wetterstation_daemon.log\n\nGreetz,\nWetterRobot" 
+        notify "Alert2" "Hello,\n\nI'm sorry. I've been trying to recober but
+after $SECONDS_BEFORE_ALARM2 seconds there still no data. Radio will be turned off, telefone will say report the problem.\nPlease do something, like checking the following logs:\n* /var/log/wetterstation/check_station.log\n* /var/log/wetterstation/wetterstation_daemon.log\n\nGreetz,\nWetterRobot" 
         [ $? -eq 0 ] && touch $ALARM2_FLAG 
     fi
     $ALARM2_CMD
