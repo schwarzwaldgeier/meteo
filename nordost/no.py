@@ -132,8 +132,9 @@ def announce_briefing_day(forecast):
         winddirection = str(int(round(f['wind']['deg'])))
         # convert to 1/8s
         clouds = str(int(round(float(f['clouds']['all']) / 12.5)))
+        description = f['weather']['description']
         formatted_forecasts = formatted_forecasts + German_weekdays[gooddate.weekday()] + ", " + str(gooddate.day) + '.' + str(gooddate.month) + '.' + str(gooddate.year) + ' ' + str(
-            gooddate.hour) + ':' + str(gooddate.minute).rjust(2, '0') + ' Uhr:\n' + windspeed + ' km/h aus ' + winddirection + '° NO, ' + clouds + '/8 Bewölkung, kein Regen.\n\n'
+            gooddate.hour) + ':' + str(gooddate.minute).rjust(2, '0') + ' Uhr:\n' + windspeed + ' km/h aus ' + winddirection + '° NO, ' + description + ", " +clouds + '/8 Bewölkung.'
 
     emailbody = open('/var/www/nordost/no-email.txt').read()
     emailbody = emailbody.replace('{forecasts}', formatted_forecasts)
