@@ -96,6 +96,9 @@ def is_during_day(forecast):
     # skip 17h forecast for winter season, briefing takes too long for that.
     if date.month > 9 or date.month < 4:
         latest = 15
+    # use 20h forecast in june and july.
+    elif 5 < date.month < 8:
+        latest = 20
     if earliest <= date.hour <= latest:
         return True
     else:
