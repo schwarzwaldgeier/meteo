@@ -11,7 +11,7 @@ if sys.version_info >= (3, 0):
     from urllib.request import urlopen
 else:
     from urllib import urlopen
-import calendar
+import math
 
 debug = False
 if len(sys.argv) > 1:
@@ -60,6 +60,12 @@ def is_wind_direction_ok(forecast):
         return False
 
 
+def degToCompass(deg):
+    val = math.floor((deg / 22.5) + 0.5)
+    arr = ["N", "NNO", "NO", "ONO", "O", "OSO", "SO", "SSO", "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW"]
+    return arr[int(val % 16)]
+        
+        
 def is_weekend(forecast):
     date = datetime.fromtimestamp(int(forecast['dt']))
     if date.weekday() >= 5:
@@ -140,7 +146,7 @@ def announce_briefing_day(forecast):
         description = f['weather'][0]['description']
         description = description.encode("utf8")
         formatted_forecasts = formatted_forecasts + German_weekdays[gooddate.weekday()] + ", " + str(gooddate.day) + '.' + str(gooddate.month) + '.' + str(gooddate.year) + ' ' + str(
-            gooddate.hour) + ':' + str(gooddate.minute).rjust(2, '0') + ' Uhr:\n' + windspeed + ' km/h aus ' + winddirection + '° NO, ' + description + ', '  + clouds + '/8 Bewölkung.\n\n'
+            gooddate.hour) + ':' + str(gooddate.minute).rjust(2, '0') + ' Uhr:\n' + windspeed + ' km/h aus ' + winddirection + '° ' + degToCompass(int(winddirection)) + ', ' + description + ', '  + clouds + '/8 Bewölkung.\n\n'
 
     emailbody = open('/var/www/nordost/no-email.txt').read()
     emailbody = emailbody.replace('{forecasts}', formatted_forecasts)
