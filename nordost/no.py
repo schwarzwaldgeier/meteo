@@ -26,7 +26,7 @@ else:
 
 
 max_windspeed = 5
-wind_direction_boundaries = {'north': 17.5, 'east': 62.5}
+wind_direction_boundaries = {'north': 10.0, 'east': 62.5}
 
 
 def read_sensitive(path):
