@@ -76,7 +76,7 @@ def is_weekend(forecast):
 
 
 def is_dry(forecast):
-    if not forecast['rain']:  # would contain downpour in l/m2 otherwise
+    if not forecast['rain'] and not forecast['snow']:  # would contain downpour in l/m2 otherwise
         return True
     else:
         return False
