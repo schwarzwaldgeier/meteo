@@ -12,6 +12,7 @@ if sys.version_info >= (3, 0):
 else:
     from urllib import urlopen
 import math
+import time
 
 debug = False
 if len(sys.argv) > 1:
@@ -64,8 +65,8 @@ def degToCompass(deg):
     val = math.floor((deg / 22.5) + 0.5)
     arr = ["N", "NNO", "NO", "ONO", "O", "OSO", "SO", "SSO", "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW"]
     return arr[int(val % 16)]
-        
-        
+
+
 def is_weekend(forecast):
     date = datetime.fromtimestamp(int(forecast['dt']))
     if date.weekday() >= 5:
@@ -181,7 +182,25 @@ owm_api_requesturl = owm_api_baseurl + "lat=" + owm_api_lat + "&lon=" + \
     owm_api_lon + "&appid=" + owm_api_key + "&lang=de"
 
 jsonurl = urlopen(owm_api_requesturl)
-response = json.loads(jsonurl.read())
+
+requestWorked = False
+maxRequests = 60
+while not requestWorked:
+    response = json.loads(jsonurl.read())
+    if response['cod'] != '200':
+        maxRequests -= 1
+        requestWorked = False
+        if maxRequests <= 0:
+            sys.exit("OWM API not available, giving up.")
+        else:
+            print ("OWM API responded with Code %s, trying again in 60 seconds or %s more times." % response['cod'], str(maxRequests))
+            time.sleep(60)
+    else:
+        requestWorked = True
+    
+
+
+    
 forecast_list = response['list']
 good_times = []
 
