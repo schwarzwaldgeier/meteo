@@ -4,7 +4,7 @@ Am kommenden Wochenende könnte es geeignetes Wetter für eine Nordost-Einweisun
 
 {forecasts}
 
-Sieh bitte nach, ob das Wetter wirklich passt - diese E-Mail wurde automatisch verschickt, weil der Computer das Wetter für geeignet hält, aber das Programm ist nicht perfekt. Insbesondere möglicherweise zu starke Thermik oder Änderungen im Tagesverlauf werden nicht immer berücksichtigt. Diese Mail ist nur ein Hinweis, dass das Wetter passen _könnte_, keine Garantie. http://www.schwarzwaldgeier.de/merkur-wetter-prognose/
+Sieh bitte nach, ob das Wetter wirklich passt - diese E-Mail wurde automatisch verschickt, weil der Computer das Wetter für geeignet hält, aber das Programm ist nicht perfekt. Insbesondere möglicherweise zu starke Thermik, die exponierte Lage des Merkur und Änderungen im Tagesverlauf werden nicht immer berücksichtigt. Diese Mail ist nur ein Hinweis, dass das Wetter passen _könnte_, keine Garantie. http://www.schwarzwaldgeier.de/merkur-wetter-prognose/
 
 
 Möchtest du den Interessenten eine Einweisung anbieten? Wenn ja:
