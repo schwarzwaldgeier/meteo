@@ -170,7 +170,7 @@ def send_email(sender, to, subject, body, smtpserver,
     msg['From'] = sender
     msg['To'] = to
     s = smtplib.SMTP(smtpserver)
-    print (s.sendmail(sender, to, msg.as_string()))
+    print ("SMTP Response: %s" % s.sendmail(sender, to, msg.as_string()))
     s.quit
     return True
 
