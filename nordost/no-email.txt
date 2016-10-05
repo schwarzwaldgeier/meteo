@@ -1,20 +1,21 @@
 Lieber Nordost-Einweiser!
 
-Am kommenden Wochenende könnte es gutes Wetter für eine Nordost-Einweisung geben, die folgenden Vorhersagen scheinen zu passen:
+Am kommenden Wochenende könnte es geeignetes Wetter für eine Nordost-Einweisung geben, die folgenden Vorhersagen scheinen zu passen:
 
 {forecasts}
 
-Möchtest du den Interessenten eine Einweisung anbieten? Wenn ja:
+Sieh bitte nach, ob das Wetter wirklich passt - diese E-Mail wurde automatisch verschickt, weil der Computer das Wetter für geeignet hält, aber das Programm ist nicht perfekt. Insbesondere möglicherweise zu starke Thermik oder Änderungen im Tagesverlauf werden nicht immer berücksichtigt. Diese Mail ist nur ein Hinweis, dass das Wetter passen _könnte_, keine Garantie. http://www.schwarzwaldgeier.de/merkur-wetter-prognose/
 
-- Sieh bitte nach, ob das Wetter wirklich passt - der Computer kann sich irren. Insbesondere möglicherweise zu starke Thermik oder Änderungen im Tagesverlauf werden nicht immer berücksichtigt. http://www.schwarzwaldgeier.de/merkur-wetter-prognose/
+
+Möchtest du den Interessenten eine Einweisung anbieten? Wenn ja:
 
 - Hier eine Liste der aktuellen Interessenten: {participantsurl}
 
-- Mit den anderen NO-Einweisern kannst du dich über den Verteiler {mailinglist} abstimmen
+- Mit den anderen NO-Einweisern kannst du dich über diesen Verteiler ({mailinglist}) abstimmen
 
 - Du möchtest eine Rundmail an die Interessierten senden? --> Info an diesen Verteiler (und Mails händisch rausschicken falls weder Sebastian noch Stefan rechtzeitig verfügbar sind)
 
-- Du möchtest auf der Website auf die Einweisung hinweisen? --> Info an diesen Verteiler (Achtung, erhöht die Anzahl der Teilnehmer und Besserwisser beträchtlich)
+- Du möchtest auf der Website, Facebook etc. auf die Einweisung hinweisen? --> Info an diesen Verteiler (Achtung, erhöht die Anzahl der Teilnehmer und Besserwisser)
 
 - Inhalte einer Nordost-Einweisung:
 
@@ -33,8 +34,8 @@ Dein freundlicher NO-Einweisungsbot /var/www/nordost/no.py auf dem Wetterstation
 
 Dies ist eine automatische E-Mail, die auf passendes Wetter und Interesse an einer Nordost-Einweisung am kommenden Wochenende hinweist, weil folgendes zusammenkommt:
 
--Du bist auf Nordost einweisungsberechtigt
--Es gibt 15 oder mehr Interessenten für eine Nordost-Einweisung
--Laut Vorhersage ist eine Nordost-Einweisung am kommenden Wochenende möglich - Wind mit maximal 18 km/h aus Nordost, maximal 6/8 Bewölkung, kein Regen.
+- Du bist auf Nordost einweisungsberechtigt
+- Es gibt 15 oder mehr Interessenten für eine Nordost-Einweisung
+- Laut Vorhersage ist eine Nordost-Einweisung am kommenden Wochenende möglich - Wind mit maximal 18 km/h aus Nordost, maximal 6/8 Bewölkung, kein Regen.
 
 Wenn du diese E-Mail nicht mehr empfangen möchtest kannst du sie abstellen: Einfach so lange Einweisungen geben, bis weniger als 15 Interessierte übrigbleiben.
