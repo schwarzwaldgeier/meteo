@@ -118,7 +118,7 @@ def announce_briefing_day(forecast):
     sender = sensitive['SENSITIVE_NORTHEAST_BRIEFERSMAIL']
     recipient = sensitive['SENSITIVE_NORTHEAST_BRIEFERSMAIL']
     mailinglist = sensitive['SENSITIVE_NORTHEAST_BRIEFERSMAIL']
-    subject = "Nordosteinweiser für's Wochenende gesucht!"
+    subject = "Bedarf und evtl. geeignetes Wetter für Nordost-Einweisung am kommenden Wochenende"
     smtpserver = sensitive['SENSITIVE_NORTHEAST_SMTPSERVER']
     smtpuser = sensitive['SENSITIVE_NORTHEAST_BRIEFERSMAIL']
     smtppassword = sensitive['SENSITIVE_NORTHEAST_SMTPPASSWORD']
