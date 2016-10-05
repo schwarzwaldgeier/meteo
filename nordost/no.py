@@ -184,11 +184,11 @@ owm_api_baseurl = "http://api.openweathermap.org/data/2.5/forecast?"
 owm_api_requesturl = owm_api_baseurl + "lat=" + owm_api_lat + "&lon=" + \
     owm_api_lon + "&appid=" + owm_api_key + "&lang=de"
 
-jsonurl = urlopen(owm_api_requesturl)
 
 requestWorked = False
 maxRequests = 60
 while not requestWorked:
+    jsonurl = urlopen(owm_api_requesturl)
     response = json.loads(jsonurl.read())
     if response['cod'] != '200':
         maxRequests -= 1
