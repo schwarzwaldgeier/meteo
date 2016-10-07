@@ -26,5 +26,5 @@ MAILTO=""
 # initiates corrective actions
 */2 * * * *     root    /var/www/BERGSTATION/monitor/check_station.sh >>/var/log/wetterstation/check_station.log 2>&1
 
-#Nordost Briefings every wednesday evening
+# Nordost Briefings every thursday evening
 0 17 * * 4      root    /usr/bin/python /var/www/nordost/no.py >> /var/log/nordost.log
