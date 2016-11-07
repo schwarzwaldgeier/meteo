@@ -58,7 +58,7 @@ function trigger_alarm1 {
 function trigger_alarm2 {
     echo "ALARM2 trigered"
     if [ ! -f $ALARM2_FLAG ]; then 
-        notify "Alert2" "Hello,\n\nI'm sorry. I've been trying to recober but
+        notify "Alert2" "Hello,\n\nI'm sorry. I've been trying to recover but
 after $SECONDS_BEFORE_ALARM2 seconds there still no data. Radio will be turned off, telefone will say report the problem.\nPlease do something, like checking the following logs:\n* /var/log/wetterstation/check_station.log\n* /var/log/wetterstation/wetterstation_daemon.log\n\nGreetz,\nWetterRobot" 
         [ $? -eq 0 ] && touch $ALARM2_FLAG 
     fi
