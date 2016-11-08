@@ -1,0 +1,18 @@
+compress
+nodelaycompress
+
+/var/log/wetterstation/check_station.log {
+rotate 50
+size 50M
+}
+
+/var/log/wetterstation/wetterstation_daemon.log {
+rotate 50
+size 100M
+postrotate
+	/etc/init.d/wetterstation stop
+	sleep 1
+	/etc/init.d/wetterstation start
+	exit 0
+endscript
+}
