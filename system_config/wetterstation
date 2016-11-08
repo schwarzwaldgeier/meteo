@@ -40,9 +40,9 @@ do_start()
 	#   0 if daemon has been started
 	#   1 if daemon was already running
 	#   2 if daemon could not be started
-	start-stop-daemon --start --quiet --pidfile $PIDFILE --exec $DAEMON --test > /dev/null \
+	start-stop-daemon --start --quiet --pidfile $PIDFILE --exec /usr/bin/python --startas $DAEMON --test > /dev/null \
 		|| return 1
-	start-stop-daemon --start --quiet --pidfile $PIDFILE --exec $DAEMON -- \
+	start-stop-daemon --start --quiet --pidfile $PIDFILE --exec /usr/bin/python --startas $DAEMON -- \
 		$DAEMON_ARGS \
 		|| return 2
 	# Add code here, if necessary, that waits for the process to be ready
@@ -72,7 +72,10 @@ do_stop()
 	start-stop-daemon --stop --quiet --oknodo --retry=0/30/KILL/5 --exec $DAEMON
 	[ "$?" = 2 ] && return 2
 	# Many daemons don't delete their pidfiles when they exit.
-	#rm -f $PIDFILE
+
+	# Maxi: dont remove it, to get the status function (with pid)to 
+	# work allways (good idea?)
+	#rm -f $PIDFILE 
 	return "$RETVAL"
 }
 
@@ -94,7 +97,7 @@ case "$1" in
 	esac
 	;;
   status)
-       status_of_proc -p $PIDFILE "$DAEMON" "$NAME" && exit 0 || exit $?
+       status_of_proc -p $PIDFILE /usr/bin/python "$NAME" && exit 0 || exit $?
        ;;
   #reload|force-reload)
 	#
