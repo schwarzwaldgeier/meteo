@@ -12,7 +12,7 @@ import urllib2
 
 HOST, PORT = "192.168.1.13", 7977
 
-# Lines comming from the weather station are separated with: 
+# Lines coming from the weather station are separated with: 
 LINE_SEPARATOR='\x1f\r\n'
 # Factors calculated by Timm
 WIND_SCALING_FACTOR=1.35  # To compensate the conical effect of Merkur.
