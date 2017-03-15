@@ -20,11 +20,10 @@ MAILTO=""
 #   funk_an: hour since the radio playback is active
 #   funk_aus: hour since the radio playback is stopped
 # NOTE: without those parameters, radio is per default disabled
-*/5 * * * * root /var/www/BERGSTATION/GenerateSounds.pl --funk_an=6 --funk_aus=22
-
+*/5 * * * 0-3 root /var/www/BERGSTATION/GenerateSounds.pl --funk_an=6 --funk_aus=22
+# No radio during G20
+# TODO Change this to normal after 18 Mar 2017!
+*/5 * * * 4-6 root /var/www/BERGSTATION/GenerateSounds.pl
 # Monitor the state of the weather station. If no new data it alarms and
 # initiates corrective actions
 */2 * * * *     root    /var/www/BERGSTATION/monitor/check_station.sh >>/var/log/wetterstation/check_station.log 2>&1
-
-# Nordost Briefings every thursday evening
-0 17 * * 4      root    /usr/bin/python /var/www/nordost/no.py >> /var/log/nordost.log
