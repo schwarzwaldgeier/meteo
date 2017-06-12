@@ -210,7 +210,8 @@ if ((time - $last_timestamp) > $OUT_OF_ORDER_TIMEOUT) {
 #    print "EIS???";
 } else {
     ### Greeting
-    AddToSoundfile($soundfile_hello, "both", 3);
+    AddToSoundfile($soundfile_pause3, "radio", 0);                   # Begin radio with a small delay to broadcast the CTCSS signal. This will cause devices to listen just in time for the actual message. 
+    AddToSoundfile($soundfile_hello, "both", 3);                     # Hier ist die Wetterstation des Gleitschirmvereins Baden auf dem Merkur. 
     
     #### Current windspeed
     AddToSoundfile($soundfile_currentWindspeed, "both", 2);          # Aktuelle Windstärke:
