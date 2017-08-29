@@ -234,7 +234,7 @@ if ((time - $last_timestamp) > $OUT_OF_ORDER_TIMEOUT) {
     ($a1,$a2) = split(",",$twenty);
     
     if ($OUTPUT_WIND_DIRECTION) { 
-            AddToSoundfile(&wdirection($a2), "both", 2)                 # (Windrichtung)
+            AddToSoundfile(&wdirection($a2), "both", 2);                 # (Windrichtung)
     }
     if (length($a1) == 3) {
         AddToSoundfile($soundfile_onehundred, "both", 0);            # einhundert ...
