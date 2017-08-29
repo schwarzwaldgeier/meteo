@@ -6,6 +6,8 @@ $RADIO_START_HOUR=0;  # When should start/stop radio playback. Default: disabled
 $RADIO_STOP_HOUR=0;
 $OUT_OF_ORDER_TIMEOUT = 900;  # If database data older than this, set out of order
 
+$OUTPUT_WIND_DIRECTION = 0; # output wind direction? (set to 0 if sensor is broken)
+
 $phone_soundfiles_dir = "/var/www/BERGSTATION/soundfiles/phone";
 $radio_soundfiles_dir = "/var/www/BERGSTATION/soundfiles/funk";
 $output_directory  = "/var/www/BERGSTATION/";
@@ -215,7 +217,9 @@ if ((time - $last_timestamp) > $OUT_OF_ORDER_TIMEOUT) {
     
     #### Current windspeed
     AddToSoundfile($soundfile_currentWindspeed, "both", 2);          # Aktuelle Windstärke:
-    AddToSoundfile(&wdirection($a2), "both", 2);                     # (Windrichtung)
+    if ($OUTPUT_WIND_DIRECTION) { 
+            AddToSoundfile(&wdirection($a2), "both", 2);             # (Windrichtung)
+    }                    
     if (length($a1) == 3) {
         AddToSoundfile($soundfile_onehundred, "both", 0);            # einhundert ...
         AddToSoundfile($ws[substr($a1,1,2)], "both", 0);             # (Windgeschwindigkeit)
@@ -228,7 +232,10 @@ if ((time - $last_timestamp) > $OUT_OF_ORDER_TIMEOUT) {
     ### Last 20 minutes average windspeed
     AddToSoundfile($soundfile_lastTwentyMinutesWindspeed, "both", 2);# Durchschnittlicher Wind der letzten 20 Minuten:
     ($a1,$a2) = split(",",$twenty);
-    AddToSoundfile(&wdirection($a2), "both", 2);                     # (Windrichtung)
+    
+    if ($OUTPUT_WIND_DIRECTION) { 
+            AddToSoundfile(&wdirection($a2), "both", 2)                 # (Windrichtung)
+    }
     if (length($a1) == 3) {
         AddToSoundfile($soundfile_onehundred, "both", 0);            # einhundert ...
         AddToSoundfile($ws[substr($a1,1,2)], "both", 0);             # (Windgeschwindigkeit)
@@ -243,7 +250,9 @@ if ((time - $last_timestamp) > $OUT_OF_ORDER_TIMEOUT) {
     ($a1,$a2) = split(",",$maxi);
     $a2 =~ s/[^0-9]//igs;
     $dummywd = &wdirection($a2);
-    AddToSoundfile($dummywd, "both", 2);                             # (Windrichtung)
+    if ($OUTPUT_WIND_DIRECTION) { 
+            AddToSoundfile($dummywd, "both", 2);                     # (Windrichtung)
+    }
     if (length($a1) == 3) {
             AddToSoundfile($soundfile_onehundred, "both", 0);        # einhundert ...
             AddToSoundfile($ws[substr($a1,1,2)], "both", 0);         # (Windgeschwindigkeit)
@@ -257,7 +266,9 @@ if ((time - $last_timestamp) > $OUT_OF_ORDER_TIMEOUT) {
     ### Wind 1h ago
     AddToSoundfile($soundfile_windspeedOneHourAgo, "both", 2);       # Wind genau vor einer Stunde:
     ($a1,$a2) = split(",",$hourly);
-    AddToSoundfile(&wdirection($a2), "both", 2);                     # (Windrichtung)
+    if ($OUTPUT_WIND_DIRECTION) { 
+            AddToSoundfile(&wdirection($a2), "both", 2);                     # (Windrichtung)
+    }        
     if (length($a1) == 3) {
         AddToSoundfile($soundfile_onehundred, "both", 0);            # einhundert ...
         AddToSoundfile($ws[substr($a1,1,2)], "both", 0);             # (Windgeschwindigkeit)
