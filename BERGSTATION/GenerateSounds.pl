@@ -5,7 +5,7 @@ use Getopt::Long;
 $RADIO_START_HOUR=0;  # When should start/stop radio playback. Default: disabled
 $RADIO_STOP_HOUR=0;
 $OUT_OF_ORDER_TIMEOUT = 900;  # If database data older than this, set out of order
-$MINIMUM_WINDSPEED_FOR_WIND_DIRECTION_OUTPUT = 20; # assuming wind direction sensor gets stuck below a certain threshold, set that threshold (in km/h) here.
+$MINIMUM_WINDSPEED_FOR_WIND_DIRECTION_OUTPUT = 1; # assuming wind direction sensor gets stuck below a certain threshold, set that threshold (in km/h) here.
 
 
 $phone_soundfiles_dir = "/var/www/BERGSTATION/soundfiles/phone";
