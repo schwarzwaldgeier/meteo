@@ -18,4 +18,4 @@ mkdir -p /var/spool/voice/messages
 chmod 777 /var/spool/voice/messages
 
 # Link crontab
-ln -sf /var/www/crontab /etc/crontab
+ln -sf /var/www/crontab /var/spool/cron/crontabs
