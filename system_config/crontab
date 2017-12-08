@@ -20,7 +20,7 @@ MAILTO=""
 #   funk_an: hour since the radio playback is active
 #   funk_aus: hour since the radio playback is stopped
 # NOTE: without those parameters, radio is per default disabled
-*/7 * * * * root /var/www/BERGSTATION/GenerateSounds.pl --funk_an=6 --funk_aus=22
+*/5 * * * * root /var/www/BERGSTATION/GenerateSounds.pl --funk_an=6 --funk_aus=22
 
 # Monitor the state of the weather station. If no new data it alarms and
 # initiates corrective actions
