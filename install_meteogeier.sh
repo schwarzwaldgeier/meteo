@@ -1,9 +1,8 @@
 #!/usr/bin/env bash
 
-PACKAGES='mysql-server mysql-client '
 AUDIO_GENERATION='sox mgetty-pvftools shntool'
 
-apt-get install -y $PACKAGES $AUDIO_GENERATION
+apt-get install -y $AUDIO_GENERATION
 
 # Install locales (DE)
 locale-gen de_DE
@@ -18,4 +17,4 @@ mkdir -p /var/spool/voice/messages
 chmod 777 /var/spool/voice/messages
 
 # Link crontab
-ln -sf /var/www/crontab /var/spool/cron/crontabs
+ln -sf /var/www/crontab /var/spool/cron/crontabs/root
