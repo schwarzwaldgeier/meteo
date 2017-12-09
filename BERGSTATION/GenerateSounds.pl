@@ -193,7 +193,7 @@ die("ERROR: radio_stop_hour: $RADIO_STOP_HOUR can't be smaller than radio_start_
 
 ### Collect and parse data
 # $content = '12,354,1458308820x6,31x7,15x15,354'; # Test sample
-$content = get("http://localhost:81/wetterstation/phone_neu.php");
+$content = get("https://www.schwarzwaldgeier.de/weather_radio_output.php");
 
 ($akt,$twenty,$hourly,$maxi) = split("x",$content);
 ($a1,$a2,$last_timestamp) = split(",",$akt);
