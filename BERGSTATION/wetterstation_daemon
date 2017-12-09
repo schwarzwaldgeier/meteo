@@ -3,7 +3,7 @@ BINARY=/var/www/BERGSTATION/WETTER_SOCKET
 PID_FILE=/var/run/wetterstation.pid
 
 # source sensitive data
-set -e; source /var/www/.sensitive; set +e 
+set -e; source /opt/meteo/.sensitive; set +e 
 
 # Detach and demonize
 echo "* Starting $BINARY ..."
