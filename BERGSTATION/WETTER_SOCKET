@@ -121,7 +121,7 @@ class ParseAndPush(SocketServer.BaseRequestHandler):
 signal.signal(signal.SIGTERM, handle_signal)
 SocketServer.TCPServer.allow_reuse_address = True
 print "\n[%s] Loading URLs from environment" % now_str()
-urls = load_urls_from_env(['BERGRECHNER', 'LENKUNG', 'ONEANDONEVHOST'])
+urls = load_urls_from_env(['ONEANDONEVHOST'])
 server = SocketServer.TCPServer((HOST, PORT), ParseAndPush)
 print "[%s] Starting socket" % now_str()
 sys.stdout.flush()
